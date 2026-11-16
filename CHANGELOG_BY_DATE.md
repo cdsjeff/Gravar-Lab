@@ -1,0 +1,322 @@
+# Gravar Changelog by Date
+
+> **Dating note:** Dates below are based on the Gravar development record available in this project. Where an exact release date was not recorded, the revision remains under **Date not recorded** rather than being assigned an invented date.
+
+## 2026-11-13
+
+### v0.6.201 — Option-Hover Web Tips
+
+- Ordinary hover no longer opens contextual web tips.
+- Hold **Option + hover** on macOS, or **Alt + hover** on non-Mac systems, to reveal a tip; release the modifier or move away to hide it.
+- Added centralized `XWebTips` handling across the main app, Video pop-out, Transcript pop-out, and build badge.
+- Added the gesture to Help/User Manual and Diagnostics.
+
+## 2026-11-12
+
+### v0.6.200 — Long-Video Waveform Calibration
+
+- Fixed saved waveform calibration becoming effectively capped around long-recording drift because persisted Point offsets inherited the temporary ±4-second Wave± limit.
+- Temporary Wave± nudging remains ±4 seconds, while saved Point corrections can now accumulate beyond that range.
+- Added >30-minute calibration diagnostics and verified points/corrections through 60 minutes survive interpolation and project serialization/restoration.
+
+## 2026-11-11
+
+### v0.6.199 — Verified Manual Save Location
+
+- Manual Save now opens the Project-folder chooser before writing in browsers with direct folder access.
+- Cancelling the chooser cancels the save; Gravar no longer silently writes a manual save into a previously remembered folder.
+- The selected folder becomes the active Project folder for the save and subsequent autosaves/exports.
+- Autosave remains automatic and does not open a picker.
+- Safari continues to use its browser-controlled Save As/download workflow.
+
+## 2026-11-08
+
+### v0.6.198 — Default Symbols Persistence and Legacy Migration
+
+- Fixed older project JSON files replacing the expanded default Symbols palette with historical 5-row/7-row built-in palettes.
+- Added `XSymbolDefaults` as the authoritative built-in palette/migration service.
+- Fresh sessions use the 44-row expanded shared default; exact legacy built-ins migrate automatically.
+- Genuinely customized project symbol sets remain project-specific and are not overwritten.
+- Symbols project persistence now uses an `XProjectState` adapter while retaining legacy project fields for compatibility.
+
+### v0.6.197 — Modular Core Refactor and Efficiency Audit
+
+- Added a lightweight `XBus` message layer plus `XCoreMessages` application subscriptions.
+- Centralized media identity/waveform calibration in `XMediaIdentity` and `XCalibration`.
+- Centralized parent/child-tier and Force PT rules in `XTranscriptHierarchy`; the main transcript is now the hierarchy mutation authority for the pop-out as well.
+- Added `XProjectState` adapters for extensible, one-pass module serialization while preserving legacy project fields.
+- Removed Drawing/Video Adjustment `XFiles.payload()` monkey-patches and replaced the 250-ms project-load video-adjustment timer with the explicit `project:loaded` message.
+- Coalesced edit-triggered recovery autosaves and transcript-pop-out full-payload synchronization to reduce redundant high-frequency work.
+- Added modular-core checks and message/autosave metrics to Diagnostics.
+- Added a detailed architecture audit to the Current Resources package; large UI modules remain scheduled for later incremental refactoring rather than being rewritten in this release.
+
+### v0.6.196 — Play Cursor Modifier Gating
+- Play button uses the normal pointer cursor during ordinary hover.
+- Up/down playback-speed cursor appears only while Command is held on macOS (Ctrl elsewhere).
+- Cursor state resets on modifier release, pointer exit, and window blur.
+
+
+### v0.6.195 — Expanded Shared Symbols Default Palette
+
+- Replaced the small default Symbols palette with the newly supplied expanded shared set.
+- The built-in default now contains 37 symbols plus 7 section headers: Onset/Offset/Talk, Arrows, Bracket, Triangles & Dots, Square, Letters, and Lines.
+- Preserved IDs, descriptions, ordering, sections, and active-symbol selection from the supplied symbol-set JSON.
+- Project-specific and manually imported symbol sets still override these defaults normally.
+
+### v0.6.194 — Shared Symbols Default Palette
+
+- Loaded the supplied shared Gravar symbol-set JSON as the built-in default Symbols palette.
+- Defaults now include `(.)`, `(0.0)`, `[`, `]`, `=`, `↑`, and `↓`, preserving the supplied IDs/descriptions and active symbol.
+- Saved/project-specific and manually imported Symbols still override the defaults normally.
+- Added the shared symbol-set JSON to the Current Resources package.
+
+### v0.6.193 — Project Files Order and Persistent Project Name
+
+- Reordered Files → Project to **Project → Codes & Symbols → Project files**.
+- Project files is now its own collapsed rollup below Codes & Symbols.
+- Project name is a single persistent field at the bottom of the Files pane and remains visible across Project, Import, Export, Diag, and Auto.
+- Removed redundant/nested Project-name placement while preserving all existing Project-files path/status functions.
+
+### v0.6.192 — Project Submenu Rollups
+
+- Preserved the v0.6.191 horizontal Files tabs.
+- Added collapsed **Project** and **Codes & Symbols** rollups inside the Project tab.
+- Project name remains last inside the Project rollup; the nested Project-files path/status rollup is preserved.
+
+### v0.6.191 — Restore Files Tabs and Project Name Order
+
+- Reverted Files from the v0.6.190 vertical accordion back to the established v0.6.189 tabbed submenu layout.
+- Project name now appears at the bottom of the Project submenu, after the other Project controls.
+- Preserved the collapsed Project-files status/path viewer from v0.6.189.
+
+### v0.6.190 — Collapsible Files Submenus
+
+- Project, Import, Export, Diagnostics, and Autosave are now compact collapsed rollups in the Files pane.
+- No Files submenu opens by default; selecting one opens it and closes the others, and selecting it again rolls it closed.
+- Autosave is permanently ordered last.
+- Project name now stays inside the Project rollup; the nested Project-files status rollup remains collapsed by default.
+
+### v0.6.189 — Project Files Rollup and Clickable Path Viewer
+
+- Project files is collapsed by default and expands only when its header is selected.
+- Replaced the ambiguous selector with an explicit **Path: Last 3 / Path: Full** toggle that visibly identifies the current mode.
+- Clicking any file pathname opens a wrapped, selectable full-width pathname viewer below the list.
+- The viewer updates immediately when the path mode changes.
+- Preserves honest browser path reporting when macOS absolute paths are unavailable.
+
+### v0.6.188 — Project File Locations and Load Status
+
+- Added a Project-files status block under Files → Project for Project JSON, transcript source, V1, V2, and audio.
+- Shows loaded/saved, referenced, missing/failed, or none status for each resource.
+- Added selectable **Last 3 levels** and **Full** path views.
+- Full reports the fullest path available to Gravar; browser-hidden macOS absolute paths are clearly identified rather than guessed.
+- Reconnect, project restore, manual media loads, and DOTE/TSV/ELAN imports now update the status display.
+- Saved path metadata and the chosen display mode persist in project JSON, while cross-project stale paths are cleared on load.
+
+## 2026-10-22
+
+### v0.6.187 — Project Folder Reconnect and Media Recovery
+
+- Added a normally hidden **Reconnect** button to Files → Project for projects whose saved Project folder is not currently accessible.
+- Remembers Chromium Project-folder handles in browser storage and checks their permission state without prompting during project load.
+- A user click on Reconnect renews permission or opens the folder picker when needed.
+- Once folder access is restored, Gravar searches for saved V1, V2, and external-audio filenames and restores those files when present.
+- Saved waveform calibration remains intact during this media recovery.
+- Prevents an old project's authorized folder from being searched while loading a different project.
+- Preserves the remembered Project-folder name in project JSON even during a temporary permission loss.
+
+### v0.6.186 — Project Media Calibration Persistence
+
+- Fixed the project-recovery workflow so saved waveform alignment survives manual reattachment of the same V1 video when automatic video restore is unavailable or fails.
+- Same-video detection prefers the saved media identity when available and falls back to filename compatibility for older projects.
+- Different replacement videos still start with clean waveform calibration.
+- Added explicit recovery guidance to project-load status and Files help.
+
+## 2026-09-09
+
+### v0.6.185 — Force PT Timecodes Explicit Only
+
+- Corrected parent-timecode inheritance so **Force PT timecodes** must be checked before a child tier receives its parent tier's Start/Stop/Duration.
+- Applies to both italic-Speaker child tiers and `((...))` transcript child tiers.
+- With Force PT off, child tiers preserve their own timing, including waveform-selected intervals.
+- Main transcript and transcript pop-out now use the same rule.
+- Updated CA Help/tooltips and current-version metadata.
+
+### v0.6.184 — Child-Tier Mode Gating
+
+- Repaired automatic tier conversion of parenthesized transcript rows when **CA → Child tiers** is off.
+- Parentheses markers now have tier meaning only while Child tiers mode is explicitly enabled.
+- Waveform-created rows containing single or double parentheses retain their own unique Start/Stop/Duration when Child tiers is off.
+- Applied the same rule to the main transcript and transcript pop-out.
+- Updated CA/Transcript Help and current-version metadata.
+
+## 2026-08-26
+
+### v0.6.183 — Code Filter Initialization Repair
+
+- Repaired the initialization error `this.filterLabels is not a function`.
+- The v0.6.182 filter methods had been attached to `XSymbols` rather than `XTalkActionPalette`, even though the Code-pane UI invokes them through `XTalkActionPalette`.
+- Moved all four filter methods to the correct Code palette object and removed the misplaced copies.
+- Preserved Any/All matching, parent/child grouping, ±1 context, transcript pop-out parity, and saved filter state.
+- Updated current-version metadata to v0.6.183.
+
+### v0.6.182 — Code-Based Transcript Filter
+
+- Added a compact Filter toggle to the right-side Code pane.
+- Existing Code buttons become filter selectors while Filter mode is active.
+- Added Any/All matching and optional ±1 parent-level context.
+- Matching parent/child tier units remain intact, including when the code is on a child tier.
+- Preserved original line numbers and synchronized filtering with the transcript pop-out.
+- Filter state is view-only and saved in project JSON.
+
+## 2026-08-18
+
+### v0.6.181 — Collapsible Code Sections
+
+- Made each Code-pane section independently collapsible/expandable by clicking its section header.
+- Added disclosure triangles and project/Code-set persistence for collapsed state.
+- Edit mode reveals all Code buttons while editing.
+- Updated Code-pane Help and build metadata.
+
+## August 10, 2026
+
+### v0.6.178 — Waveform Calibration Import in Project / Import
+
+- Added **Waveform calibration** to **Files → Import**.
+- The command invokes the same calibration-recovery workflow available in the Waveform calibration pane.
+- Imports only waveform alignment/calibration data from an older Gravar project JSON.
+- Preserves the current transcript, media assignment, codes, notes, drawings, and other project settings.
+- Retained the original **Wave → Waveform calibration → Import** control.
+
+### v0.6.177 — Waveform Calibration Recovery Import
+
+- Added an **Import** control to the **Waveform calibration** pane.
+- Allows waveform alignment information to be recovered from an older Gravar project JSON after media must be reloaded manually.
+- Imports the saved Absolute offset and all saved Point calibration values.
+- Migrates older single drift-anchor calibration data into the current Point format.
+- Supports older projects containing only `waveformOffsetSeconds` when no newer calibration fields exist.
+- Does not replace the current transcript, media assignment, codes, notes, drawings, or other project settings.
+- Resets the temporary waveform nudge after import so recovered offsets are not applied twice.
+
+### v0.6.176 — Waveform Interval Timing Fix
+
+- Repaired **Command–Option waveform selection** insertion so the new transcript row uses the onset and offset of the selected waveform interval.
+- The selected onset and offset are frozen when the Insert dialog opens.
+- **Play** previews that same frozen interval.
+- **Insert** writes the selected onset to Start and selected offset to Stop.
+- Removed dependence on the active or preceding transcript row for timing during insertion.
+- Applied the repair to both the main waveform and the video pop-out waveform.
+
+## August 5, 2026
+
+### v0.6.175 — Waveform Point Undo
+
+- Added a small **Undo** button immediately beside **Clear** in the Waveform calibration pane.
+- Undo reverses only the most recent **Point** calibration command.
+- Restores the previous set of calibration points.
+- Restores the temporary waveform nudge used to create the undone point.
+- The button remains disabled until a Point command has been made.
+- Undo does not reverse **Absolute**, **Clear**, or unrelated waveform operations.
+
+## July 28, 2026
+
+### v0.6.172 — Electron Desktop Edition
+
+- Added a repository-ready Electron desktop edition of Gravar.
+- Added native Project-folder designation and direct filesystem access.
+- Enabled direct project saves, autosaves, exports, FrameClips, V-Clips, and `Old_files` management.
+- When no Project folder is active, the folder containing the first imported project or media file can become the Project folder.
+- Added native folder and save dialogs.
+- Media is attached immediately before optional recovery storage.
+- Removed the Electron edition’s dependence on IndexedDB for loading large media files.
+- Preserved **Command–M** for Merge rather than allowing Electron to use it for minimizing the application.
+- Added a restricted preload bridge with Node integration disabled and context isolation enabled.
+- Retained a standalone browser HTML edition.
+
+## Date not recorded
+
+### v0.6.174 — Waveform Selection Preview
+
+- Added a **Play** button to the dialog opened after **Command–Option-dragging** across the waveform.
+- Users can preview the selected interval before inserting a transcript row.
+- Preview plays the selected interval once while keeping the dialog open.
+- The dialog provides **Cancel**, **Play**, and **Insert**.
+- Closing or canceling the dialog stops an active preview.
+- Supported in both the main waveform and the video pop-out waveform.
+
+### v0.6.173 — Split Transcript Line
+
+- Added **Option–Return** to split a transcript line at the text cursor.
+- Text before the cursor remains in the original row.
+- Text after the cursor moves into a new row immediately below.
+- Speaker, child-tier status, and Group membership carry into the new row.
+- Start, End, and Duration remain blank in the new row.
+- Codes and Line Notes remain with the original row.
+- Works in both the main transcript and transcript pop-out.
+- Supports **Command–Z Undo**.
+
+### v0.6.171 — Final Idle Autosave and Project-Folder Recovery
+
+- Added one final autosave after five minutes of inactivity before autosave pauses.
+- Activity resumes the autosave schedule.
+- Added a **Designate** workflow for Chrome/Edge Project-folder authorization.
+- When folder authorization is missing or expired, **Save** prompts the user to re-designate the Project folder.
+- Manual saves, autosaves, exports, and `Old_files` management use the designated folder.
+- Autosave numbering scans the folder for the highest existing number so numbering does not restart on another computer or browser session.
+- Excess autosaves are archived for each recognized Gravar autosave series.
+- Safari continues to use browser recovery storage and manual Save As because it cannot provide a persistent writable folder handle.
+
+### v0.6.170 — Safari Save Workflow
+
+- Added a Safari-specific **Save As…** workflow.
+- Changed **Folder** to **Save location** when persistent folder access is unavailable.
+- Added status messaging indicating that Safari users must choose a location at each save.
+- Preserved Chrome/Edge direct Project-folder behavior.
+- Clarified that Safari cannot infer or retain the folder from which media was imported.
+
+### v0.6.169 — Imported Speaker Label Normalization
+
+- Standardized imported default speaker labels from `Speaker 1` to `Spkr 1`.
+- Applied normalization to DOTE, TSV, appended project/TSV, and ELAN TSV imports.
+- Preserved custom speaker names without modification.
+
+### v0.6.168 — MacWhisper DOTE Import
+
+- Added **Files → Import → DOTE**.
+- Imports MacWhisper DOTE JSON directly into Gravar.
+- Maps `startTime` to Start, `endTime` to End, `speakerDesignation` to Speaker, and `text` to Transcript.
+- Calculates Duration automatically.
+- Validates JSON and the top-level `lines` structure.
+- Sorts imported rows chronologically.
+- Refreshes the transcript, waveform, and transcript pop-out.
+- Adds an Undo checkpoint, autosave integration, and import statistics.
+
+### v0.6.166 — Compact Video Rollups
+
+- Reorganized the Video pane into compact collapsible sections.
+- Added rollups for **Gestures**, **Adjustments**, and **Tools & Pop-out**.
+- Left-justified section labels and removed unnecessary explanatory rows while collapsed.
+- Combined Video tools and pop-out controls into a compact shared panel.
+- Preserved V1/V2 visibility, Stack, attached controls, Fr-Clip, and V-Clip functions.
+
+### v0.6.165 — Independent V1/V2 Display Adjustments
+
+- Added separate V1 and V2 adjustment banks.
+- Added independent Brightness, Contrast, Color, Red, Green, and Blue controls.
+- Added an option to link V1 and V2 adjustments.
+- Added **Reset both**.
+- Saved video display adjustments in the project.
+- Included adjustment values in V-Clip specifications.
+
+### v0.6.164 — Transcript Pop-out Count Repair
+
+- Rewrote transcript pop-out word and utterance count functions.
+- Removed problematic template-literal regular-expression escaping that could invalidate the pop-out script.
+- Preserved live count updates and pause-marker exclusion behavior.
+
+### v0.6.163 — Word and Utterance Counts
+
+- Added **Words** and **Utts** fields between Duration and Speaker.
+- Counts update live as transcript text changes.
+- Parenthetical pause-marker content is excluded from both counts.
+- Added visibility controls for the new fields alongside Start, Stop, Duration, and Speaker.
