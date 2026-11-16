@@ -1,6 +1,23 @@
+
+## Gravar v0.6.207 — Modifier-Safe Web Tips (2026-11-16)
+- Option/Alt-hover web tips now appear only when Option/Alt is the sole modifier.
+- Holding Command/Ctrl/Shift with Option/Alt immediately hides the web tip, preventing interference with Project Note, coding, waveform, and video shortcuts.
+- Preserves the existing Option-hover help convention and note shortcut descriptions.
 # Gravar Changelog by Date
 
 > **Dating note:** Dates below are based on the Gravar development record available in this project. Where an exact release date was not recorded, the revision remains under **Date not recorded** rather than being assigned an invented date.
+
+## 2026-11-16
+
+### v0.6.206 — Note Shortcut Web Tips
+- Added Line Note (Command-\) and Project Note (Command-Option-\; Command-Shift-\ alias) shortcuts to their Option-hover button tips and to transcript-line/text tips in the main transcript and Transcript pop-out.
+
+### v0.6.205 — Empty-Code Hotspot
+
+- Uncoded non-comment transcript rows now show a small muted open-circle (`○`) Code hotspot at the right edge.
+- Command-Option-click on macOS (Ctrl-Alt-click elsewhere) opens the existing Add Code palette for that row.
+- Adding the first Code replaces the open circle with the styled Code marker; deleting the last Code restores it.
+- Uses the existing `XCodeIconMenu` path and preserves the current Code system, filters, and project persistence.
 
 ## 2026-11-15
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-Gravar v0.6.204 — Default Code System
+Gravar v0.6.207 — Note Shortcut Web Tips
 Single-file web app with modular internal architecture.
 
 Current release highlights:
@@ -20,6 +20,8 @@ Current release highlights:
 - A 2-pixel gap now separates the Codes & Symbols and Project files roll-down headers for clearer visual distinction.
 - Built-in Symbols now load the expanded shared Gravar symbol set with section headers for onset/offset/talk, arrows, brackets, triangles & dots, squares, letters, and lines.
 - Built-in Codes now load the shared Gravar default code system with DEAN, Todd minspeak, Linda, Pre-emptive & Transition, and Embodied sections; legacy built-in code palettes migrate automatically while customized project palettes are preserved.
+- Uncoded transcript rows now show a small open-circle Code hotspot at the right edge; Command-Option-click (Ctrl-Alt-click on non-Mac systems) opens the existing Add Code palette.
+- Line Note and Project Note shortcuts are included in the Option/Alt-hover tips for their buttons and for transcript lines/text fields in both the main transcript and transcript pop-out.
 - Play button cursor is now a normal pointer unless the playback-speed modifier is actively held (Command on macOS; Ctrl on non-Mac platforms).
 - Manual Save now always opens the Project-folder selection window first in Chrome/Edge so the save location can be verified; autosave remains automatic and silent.
 - Contextual web tips require Option + hover on macOS (Alt + hover on non-Mac systems). Native browser title tooltips are globally suppressed so ordinary hover stays completely quiet in the main app and pop-outs.
@@ -49,7 +51,7 @@ Primary UI/application modules:
 - XScrollSync
 - XApp
 
-Architecture note for v0.6.204:
+Architecture note for v0.6.207:
 - Cross-cutting rules are being moved from large UI modules into small single-responsibility services.
 - New cross-module behavior should prefer XBus messages or explicit service APIs over direct mutation of another UI module.
 - Project-state extensions should register with XProjectState rather than monkey-patching XFiles.payload().
@@ -58,7 +60,7 @@ Architecture note for v0.6.204:
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>Gravar — Version 0.6.204 Standalone Web</title>
+<title>Gravar — Version 0.6.207 Standalone Web</title>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <style>
 :root{
@@ -339,6 +341,26 @@ textarea.side{width:100%;height:100%;resize:none;border:1px solid #cfd9e6;border
 .code-style-marker:hover{
   outline:1px solid rgba(15,23,42,.35);
   outline-offset:2px;
+}
+/* V0.6.205: neutral hotspot for rows with no assigned Code. */
+.code-empty-hotspot{
+  display:inline-flex;
+  width:9px;
+  height:9px;
+  flex:0 0 9px;
+  align-items:center;
+  justify-content:center;
+  color:#94a3b8;
+  background:transparent;
+  font:10px/9px "Courier New",Courier,monospace;
+  cursor:pointer;
+  opacity:.9;
+  border-radius:50%;
+}
+.code-empty-hotspot:hover{
+  color:#64748b;
+  outline:1px solid rgba(100,116,139,.28);
+  outline-offset:1px;
 }
 .code-icon-tooltip{
   position:fixed;
@@ -3175,7 +3197,7 @@ input[type=reset],
 <div class="info-popup-body">
 <div class="left-pane-title"><span class="left-pane-title-text">About</span><button class="pane-help-btn" data-pane-help="about" title="About pane help">?</button></div>
 <p><strong>Gravar</strong> is a browser-based video transcription workspace for detailed interaction analysis. It is designed for timed transcript construction while viewing video, inspecting the audio waveform, and recording line-level talk/action notes.</p>
-<p id="aboutCurrentVersion"><strong>Current version:</strong> Gravar 0.6.204 — Standalone Web. Fresh projects now use the shared Gravar Code system as the built-in default. Older built-in Code palettes migrate automatically, while genuinely customized project palettes are preserved.</p>
+<p id="aboutCurrentVersion"><strong>Current version:</strong> Gravar 0.6.207 — Standalone Web. Option/Alt-hover web tips now stay hidden whenever Command/Ctrl/Shift is also held, so shortcuts remain unobstructed.</p>
 <p>The app runs locally in the browser as a single HTML file. Project data is saved separately as JSON, with optional TSV/CSV export for use in spreadsheets or other analysis tools.</p>
 <p>Major functions include video loading, waveform navigation, transcript rows with Start/End/Speaker fields, editable transcript pop-out, video pop-out, transcript pop-out, symbol insertion, autosave, TSV/CSV/RTF export, and diagnostics.</p>
 <h3>License</h3>
@@ -3195,7 +3217,7 @@ input[type=reset],
 <button class="soft" id="downloadFormattedHelp" title="Download the updated Help/User Manual as a formatted, scrollable HTML file that documents current Gravar features and can be printed or saved as PDF.">Download User Manual</button>
 </div>
 <h3>Gravar help guide and user manual</h3>
-<p id="helpCurrentVersion"><strong>Current version:</strong> Gravar 0.6.204 — Standalone Web.</p>
+<p id="helpCurrentVersion"><strong>Current version:</strong> Gravar 0.6.207 — Standalone Web.</p>
 <p><strong>Gravar</strong> is a browser-based workspace for detailed video/audio transcription and interaction analysis. It combines synchronized media playback, transcript timing, waveform inspection, transcript-linked coding, comments, group/span indicators, pop-out displays, project saving, and structured exports in a single local HTML application.</p>
 <h3>Basic workflow</h3>
 <ol>
@@ -3281,7 +3303,7 @@ input[type=reset],
 <li><strong>Default Code system:</strong> fresh projects use the shared Gravar code set with DEAN, Todd minspeak (home dev), Linda (home dev), Pre-emptive &amp; Transition, and Embodied sections. Loading an older Gravar project with the former built-in question/answer/repair/overlap palette upgrades it to this default; customized project code palettes are preserved.</li>
 <li><strong>Filter:</strong> click Filter in the Code pane, then use the existing Code buttons to select which coded transcript units are shown. Parent/child tier units stay together. Optional ±1 shows one preceding and one following parent-tier unit. Any/All controls whether one or every selected Code must be present. Filter mode is view-only and does not alter transcript data.</li>
 <li><strong>Selected Code buttons:</strong> selected buttons use a border highlight in the code’s assigned/inherited color.</li>
-<li><strong>Transcript markers:</strong> styled Code shapes appear on the right side of transcript rows. Click a Code icon to show its name; Command/Ctrl-click changes or deletes that Code; Command/Ctrl-Option/Alt-click opens the Code palette to add another Code. The first selected code is farthest right; later selected codes extend leftward.</li>
+<li><strong>Transcript markers:</strong> styled Code shapes appear on the right side of transcript rows. If a row has no Code, a small open circle (○) marks the Code hotspot. Command-Option/Ctrl-Alt-click that open circle to add the first Code. On an existing Code icon, click shows its name, Command/Ctrl-click changes or deletes that Code, and Command/Ctrl-Option/Alt-click adds another Code. The first selected code is farthest right; later selected codes extend leftward.</li>
 <li><strong>Legacy preservation:</strong> existing coded rows with no assigned style still show a fallback red-circle marker so old project coding remains visible.</li>
 <li><strong>Line Note marker:</strong> a small black diamond with a red top tip indicates a Line Note.</li>
 </ul>
@@ -3404,8 +3426,8 @@ input[type=reset],
 <section class="panel right">
 <div class="tabs">
 <button class="tab active" id="talkTab" title="Show Code coding panel">Code</button>
-<button class="tab" id="notesTab" title="Show line-level Line Note panel">Line Note</button>
-<button class="tab" id="logTab" title="Show project-level Project Note panel">Project Note</button>
+<button class="tab" id="notesTab" title="Show line-level Line Note panel. Shortcut: Command-\ on macOS; Ctrl-\ on non-Mac systems.">Line Note</button>
+<button class="tab" id="logTab" title="Show project-level Project Note panel. Shortcut: Command-Option-\ on macOS; Ctrl-Alt-\ on non-Mac systems. Command/Ctrl-Shift-\ is also accepted.">Project Note</button>
 <button class="tab" id="symbolsTab" title="Show Symbols panel">Symbols</button>
 <button class="tab" id="groupTab" title="Show Group hairline panel">Group</button>
 </div>
@@ -3751,6 +3773,8 @@ input[type=reset],
 /* Gravar V0.6.202: removes the redundant Files → Project accordion/header, removes the shared white backing pane behind Project/Codes & Symbols/Project files, and permanently migrates native title attributes into Option/Alt-hover web-tip metadata so browser-native hover tooltips cannot appear. */
 /* Gravar V0.6.203: adds a 2-pixel visual gap above the Project files roll-down header so Codes & Symbols and Project files remain visually distinct without restoring a shared backing pane. */
 /* Gravar V0.6.204: makes the supplied shared Code system the built-in default, adds legacy-default migration while preserving customized project Code palettes, and moves Code persistence into XProjectState. */
+/* Gravar V0.6.205: adds a neutral open-circle Code hotspot to uncoded transcript rows; Command/Ctrl-Option/Alt-click opens the existing Add Code palette without creating a second coding pathway. */
+/* Gravar V0.6.207: prevents Option/Alt-hover web tips from appearing during Command/Ctrl/Shift modified shortcuts, keeping note and coding gestures unobstructed. */
 /* Gravar V0.6.170: adds a Safari-specific Save As workflow and explains that imported-file folders cannot be reused as writable project folders. */
 /* Gravar V0.6.171: performs one final autosave at the 5-minute inactivity boundary before pausing; re-prompts for stale/missing Project-folder authorization on Save; synchronizes autosave numbering with the designated folder; and archives excess backups for every Gravar autosave series in that folder. */
 /* Gravar V0.6.173: adds an Electron desktop file-system bridge, aligns the initial Project folder to the first user-selected project/media/transcript file, preserves Command-M for Merge, and attaches media before optional browser recovery storage so storage cannot block playback. The same HTML remains browser-compatible. */
@@ -3760,9 +3784,9 @@ input[type=reset],
 ========================= */
 const XBuild = Object.freeze({
   appName: 'Gravar',
-  version: '0.6.204',
+  version: '0.6.207',
   label: 'Standalone Web',
-  description: 'This build makes the supplied shared Gravar Code system the built-in default for fresh projects. Older built-in question/answer/repair/overlap palettes migrate automatically, customized project Code palettes remain intact, and Code persistence now uses the modular XProjectState adapter architecture. Existing Project-menu spacing, expanded default Symbols, Option/Alt web tips, long-video calibration, and verified manual Save behavior are preserved.',
+  description: 'This build adds the Line Note and Project Note keyboard shortcuts to their Option/Alt-hover web tips and to transcript-line tips in the main transcript and transcript pop-out. Existing Code hotspot behavior, default Codes/Symbols, Project behavior, long-video calibration, and verified manual Save behavior are preserved.',
   title(){
     return this.appName+' — Version '+this.version+' '+this.label;
   },
@@ -5051,6 +5075,8 @@ const XWebTips = {
       if(state.tip) state.tip.classList.add('hidden');
     };
 
+    const helpModifierOnly=event=>!!(event && event.altKey && !event.metaKey && !event.ctrlKey && !event.shiftKey);
+
     const show=()=>{
       if(!state.current || !state.altDown) return hide();
       const text=String(state.current.dataset.gravarWebtip || '').trim();
@@ -5070,7 +5096,7 @@ const XWebTips = {
     const enterTarget=(el,event)=>{
       if(!el) return leaveCurrent();
       state.current=el;
-      state.altDown=!!(event && event.altKey);
+      state.altDown=helpModifierOnly(event);
       if(state.altDown) show();
       else hide();
     };
@@ -5085,7 +5111,7 @@ const XWebTips = {
     doc.addEventListener('pointermove',event=>{
       state.x=Number(event.clientX)||0;
       state.y=Number(event.clientY)||0;
-      state.altDown=!!event.altKey;
+      state.altDown=helpModifierOnly(event);
       const target=targetFor(event.target);
       if(target!==state.current) state.current=target;
       if(state.altDown && state.current) show();
@@ -5102,17 +5128,15 @@ const XWebTips = {
     },true);
 
     win.addEventListener('keydown',event=>{
-      if(event.key==='Alt'){
-        state.altDown=true;
-        show();
-      }
+      state.altDown=helpModifierOnly(event);
+      if(state.altDown) show();
+      else hide();
     },true);
 
     win.addEventListener('keyup',event=>{
-      if(event.key==='Alt'){
-        state.altDown=false;
-        hide();
-      }
+      state.altDown=helpModifierOnly(event);
+      if(state.altDown) show();
+      else hide();
     },true);
 
     win.addEventListener('blur',()=>{
@@ -6776,7 +6800,9 @@ const XTranscript = {
       codeCount=String(row.talkAction||'').split(';').map(s=>s.trim()).filter(Boolean).length;
     }
     const hasNote=!!XUtils.textForCompare(row.notes||'');
-    if(!codeCount && !hasNote) return 24;
+    const showEmptyCodeHotspot=!(this.isCommentRow && this.isCommentRow(row)) && codeCount===0;
+    const visibleCodeCount=showEmptyCodeHotspot ? 1 : codeCount;
+    if(!visibleCodeCount && !hasNote) return 24;
 
     // 7-10 px marker glyphs + 3 px flex gaps + lane padding.
     // Do not cap this value: the transcript field should yield width to the
@@ -6785,8 +6811,8 @@ const XTranscript = {
     const noteWidth=12;
     const gap=3;
     const padding=8;
-    const markerCount=codeCount + (hasNote ? 1 : 0);
-    const width=padding + (codeCount*codeWidth) + (hasNote ? noteWidth : 0) + Math.max(0,markerCount-1)*gap;
+    const markerCount=visibleCodeCount + (hasNote ? 1 : 0);
+    const width=padding + (visibleCodeCount*codeWidth) + (hasNote ? noteWidth : 0) + Math.max(0,markerCount-1)*gap;
     return Math.max(24, Math.ceil(width));
   },
 
@@ -6868,7 +6894,9 @@ const XTranscript = {
           markerBox.append(marker);
         }
       });
-      markerBox.title=markerBox.children.length ? 'Code markers: '+XTalkActionPalette.splitCodes(row.talkAction||'').join('; ') : '';
+      if(!(this.isCommentRow && this.isCommentRow(row)) && typeof XCodeIconMenu !== 'undefined' && typeof XCodeIconMenu.ensureEmptyHotspot === 'function') XCodeIconMenu.ensureEmptyHotspot(markerBox,row.id);
+      const assignedCodeLabels=XTalkActionPalette.splitCodes(row.talkAction||'');
+      markerBox.dataset.gravarWebtip=assignedCodeLabels.length ? 'Code markers: '+assignedCodeLabels.join('; ') : 'No Code assigned. Command-Option-click the open circle to add a Code.';
     }
     const hasNote=!!XUtils.textForCompare(row.notes||'');
     const noteDot=indicatorBox.querySelector('.tr-note-marker') || indicatorBox.querySelector('.tr-indicator-dot:last-child');
@@ -7757,7 +7785,7 @@ const XTranscript = {
 
       const line=document.createElement('div');
       line.className='tr-row'+(isComment ? ' comment-row' : '')+(!isComment && this.isChildTierRow && this.isChildTierRow(row) ? ' child-tier-row' : '');
-      line.title='Transcript line. Click to select; Shift-click selects a range; Command/Ctrl-click plays this row or the selected row range once; Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space.';
+      line.title='Transcript line. Click to select; Shift-click selects a range; Command/Ctrl-click plays this row or the selected row range once; Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted).';
       line.dataset.row=row.id;
       line.onclick=e=>{
         if(e.target.classList.contains('tr')){
@@ -7769,6 +7797,7 @@ const XTranscript = {
       };
 
       const transcript=XRichText.makeEditable(row,'transcript','Transcript','tr');
+      transcript.title='Transcript text for this line. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted). Command/Ctrl-click plays this row or selected row range once; Command/Ctrl-Option/Alt-click repeats until Escape or Shift-Space.';
       this.applySpeakerStyleToTranscriptField(row, transcript);
       transcript.onclick=e=>{
         XRichText.setActive(transcript,row,'transcript');
@@ -7812,7 +7841,9 @@ const XTranscript = {
             codeMarkers.append(marker);
           }
         });
-        codeMarkers.title=codeMarkers.children.length ? 'Code markers: '+XTalkActionPalette.splitCodes(row.talkAction||'').join('; ') : '';
+        if(typeof XCodeIconMenu !== 'undefined' && typeof XCodeIconMenu.ensureEmptyHotspot === 'function') XCodeIconMenu.ensureEmptyHotspot(codeMarkers,row.id);
+        const assignedCodeLabels=XTalkActionPalette.splitCodes(row.talkAction||'');
+        codeMarkers.dataset.gravarWebtip=assignedCodeLabels.length ? 'Code markers: '+assignedCodeLabels.join('; ') : 'No Code assigned. Command-Option-click the open circle to add a Code.';
       }
       const noteDot=document.createElement('span');
       noteDot.className='tr-indicator-dot tr-note-marker'+(XUtils.textForCompare(row.notes||'') ? ' has-note' : '');
@@ -9850,7 +9881,9 @@ const XGroupPalette = {
       codeCount=String(row.talkAction||'').split(';').map(s=>s.trim()).filter(Boolean).length;
     }
     const hasNote=!!XUtils.textForCompare(row.notes||'');
-    if(!codeCount && !hasNote) return 24;
+    const showEmptyCodeHotspot=!(this.isCommentRow && this.isCommentRow(row)) && codeCount===0;
+    const visibleCodeCount=showEmptyCodeHotspot ? 1 : codeCount;
+    if(!visibleCodeCount && !hasNote) return 24;
 
     // 7-10 px marker glyphs + 3 px flex gaps + lane padding.
     // Do not cap this value: the transcript field should yield width to the
@@ -10768,6 +10801,56 @@ const XCodeIconMenu = {
     menu.classList.remove('hidden');
     requestAnimationFrame(()=>this.positionBox(menu,anchor));
     XStatus.set(mode==='add' ? 'Choose a Code to add to the transcript line. Codes already on this line are greyed out.' : 'Choose a replacement Code, or delete this Code from the transcript line. Codes already on this line are greyed out.');
+  },
+
+  makeEmptyHotspot(rowId){
+    const marker=document.createElement('span');
+    marker.className='code-empty-hotspot';
+    marker.textContent='○';
+    marker.dataset.rowId=rowId||'';
+    marker.setAttribute('role','button');
+    marker.setAttribute('tabindex','0');
+    marker.setAttribute('aria-label','No Code assigned. Command-Option-click to add a Code.');
+    marker.dataset.gravarWebtip='No Code assigned. Command-Option-click to add a Code.';
+    const activate=event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      if(event.stopImmediatePropagation) event.stopImmediatePropagation();
+      const row=this.row(rowId);
+      if(row){
+        XState.activeRowId=row.id;
+        XState.selectedRowIds=new Set([row.id]);
+        XState.selectionAnchorId=row.id;
+        if(typeof XTranscript !== 'undefined' && typeof XTranscript.markRows === 'function') XTranscript.markRows();
+        if(typeof XSidePane !== 'undefined' && typeof XSidePane.sync === 'function') XSidePane.sync();
+        if(typeof XTalkActionPalette !== 'undefined' && typeof XTalkActionPalette.markSelected === 'function') XTalkActionPalette.markSelected();
+      }
+      const mod=event.metaKey||event.ctrlKey;
+      if(mod && event.altKey){
+        this.openMenu(marker,rowId,'','add');
+      }else{
+        this.showTooltip(marker,'No Code assigned — Command-Option-click to add a Code');
+      }
+    };
+    marker.addEventListener('click',activate);
+    marker.addEventListener('keydown',event=>{
+      if(event.key==='Enter' || event.key===' '){
+        activate(event);
+      }
+    });
+    return marker;
+  },
+
+  ensureEmptyHotspot(markerBox,rowId){
+    if(!markerBox) return;
+    const hasRealCode=!!markerBox.querySelector('.code-style-marker');
+    const existing=markerBox.querySelector('.code-empty-hotspot');
+    if(hasRealCode){
+      if(existing) existing.remove();
+      return;
+    }
+    if(existing) return;
+    markerBox.append(this.makeEmptyHotspot(rowId));
   },
 
   handleMarkerClick(event,rowId,label){
@@ -14230,7 +14313,7 @@ const XPaneHelp = {
       ca: {title:'CA pane help', preamble:'The CA pane contains Conversation Analysis controls for parent/child tiers and copied transcript style buttons.', items:[['Child tiers','When Child tiers is checked, rows whose Transcript text begins with (( are child tiers under the nearest prior parent tier, rows beginning with a single ( are parent tiers, and italic Speaker rows can also be child tiers. When Child tiers is off, parentheses are ordinary transcript text and rows retain their own timecodes.'],['Force PT timecodes','When checked, child tiers under a parent tier are forced to use that parent tier’s Start/Stop/Dur values, including child tiers marked with double parentheses. When unchecked, child tiers retain their own Start/Stop/Dur values; merely becoming a child tier does not replace their timing.'],['Style buttons','B, I, color, and Clear use the same rich-text formatting functions as the Transcript pane.']]},
       transcript: {title:'Transcript pane help', preamble:'The Transcript pane contains rich-text formatting, transcript display controls, transcript pop-out controls, and find/replace.', items:[['B / I / color buttons','Apply bold, italic, or selected color to the active rich-text field. Speaker-field italic/color styling is also inherited by the associated transcript line. Command/Ctrl-\ opens an inline Line Note popdown for the active transcript row; Command/Ctrl-Option/Alt-\ opens the Project Note popdown; Esc closes either popdown and writes changes back to the matching note panel.'],['Child tiers','Parentheses-based tier tagging applies only when Child tiers is checked: (( begins a child tier, a single ( begins a parent tier, and italic Speaker rows can also be child tiers. When Child tiers is off, parenthesized transcript text is treated as an ordinary full transcript line with its own timecodes. Child tiers retain their own Start/Stop/Duration unless Force PT timecodes is checked; Force PT applies equally to italic-Speaker and double-parentheses child tiers.'],['Clear','Removes rich-text formatting from the selected text in the active field.'],['Find / Replace','Choose Speaker or Transcript, enter literal Find text and optional replacement text, then use Find, Replace, or Replace all. Replace all is undoable with Command/Ctrl-Z.'],['Start/End shortcuts','Command-click / Ctrl-click a Start or End field seeks to that field time; Command-Option-click / Ctrl-Alt-click inserts the current time. Command-[ / Ctrl-[ sets Start; Command-] / Ctrl-] sets End for the active row.'],['Playback shortcuts','Command-click / Ctrl-click in a transcript text row plays that row or the selected row range once. Command-Option-click / Ctrl-Alt-click repeats that row or the selected row range until Escape or Shift-Space.'],['Follow coordination','When Follow is on, the active row and Code buttons coordinate with the current followed transcript row.']]},
       workspace: {title:'Persistent workspace controls help', preamble:'The persistent workspace controls remain visible below the left pane regardless of which pane is open. They support timing, line management, Follow, frame stepping, playback, and rapid movement through the video.', items:[['Time display','Shows current time and total duration. Click the display to copy the current time.'],['Dur / LineDur','Dur inserts pause-duration rows between selected contiguous rows. LineDur computes row duration from End minus Start.'],['Follow','Highlights the current row during playback, keeps the primary followed row visible, and coordinates Code state with the followed line.'],['+line / +above / +below / del / Merge','Add, delete, or merge transcript rows. Shift-click rows to select a range before Merge or Dur.'],['[ and ]','Set Start and End from the current video time. Shortcuts: Command-[ / Ctrl-[ and Command-] / Ctrl-].'],['Transport row','Use −1s, frame back, Play, frame forward, and +1s for movement and playback. Command/Ctrl-Left/Right scrubs by 0.10 sec; Command-Shift/Ctrl-Shift-Left/Right jumps by 1.0 sec. Shift-Space toggles play/pause.'],['Playback','Command/Ctrl-click the Play button toggles play/pause; Command/Ctrl-Option/Alt-click starts playback from the focused row Start time; double-click Play resets playback speed to 100%.']], sections:[{title:'Transcript row fields', items:[['Start','The onset time for the row. The visible field rounds to tenths for readability, while internal/exported timing preserves millisecond precision. Command/Ctrl-click a Start field to seek the video to that Start time. Command-Option/Ctrl-Alt-click inserts the current video time into Start. Command-[ / Ctrl-[ also sets Start for the active row.'],['End / Stop','The offset time for the row. Command/Ctrl-click an End field to seek the video to that End time. Command-Option/Ctrl-Alt-click inserts the current video time into End. Command-] / Ctrl-] also sets End for the active row.'],['Dur','A computed display of End minus Start. Command/Ctrl-click a Dur field to insert that row duration. Click LineDur to compute or refresh row durations for all rows; exported durations preserve millisecond precision.'],['Speaker','The speaker or participant ID for the row. Speaker fields are right-justified, capped to seven visible characters, and inset by one character; italic or color formatting on the Speaker field is inherited by that row’s transcript text. Command/Ctrl-click a Speaker field to open the Speaker color menu.'],['Transcript','The main utterance/action text for the row. It supports rich text, symbol insertion, row segment playback, and coding shortcuts. Command/Ctrl-click plays this row or the selected row range once. Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space.']]}]},
-      talkaction: {title:'Code pane help', preamble:'The Code pane assigns row-level analytic codes to the active transcript line. It is designed for rapid coding during playback, Follow, or segment-review workflows.', items:[['Code buttons','Click a code to toggle it on or off for the active transcript row. Selected codes are highlighted and stored in the row-level Code field. On transcript-row Code icons, plain click shows the Code name, Command/Ctrl-click replaces or deletes the clicked Code, and Command/Ctrl-Option/Alt-click adds another Code from the palette.'],['Follow coordination','When Follow is on, the active row can shift with the currently followed transcript line, so the highlighted Code buttons reflect that line.'],['Transcript playback','Command-click / Ctrl-click a row plays the active row or selected row range once. Command-Option-click / Ctrl-Alt-click repeats the active row or selected row range until Escape or Shift-Space.'],['Section headers','Outside edit mode, click any section header to hide or show only the Code buttons belonging to that section. The triangle shows whether the section is expanded or collapsed, and each section remembers its state in the project.'],['Edit pencil','Toggle code-edit mode. Edit mode temporarily reveals all Code buttons so you can add codes before/after the selected code, add section dividers, delete items, and drag-reorder the palette.'],['Import/export codes','Use Files → Project to import or export reusable Code sets without changing existing row-level codes.']]},
+      talkaction: {title:'Code pane help', preamble:'The Code pane assigns row-level analytic codes to the active transcript line. It is designed for rapid coding during playback, Follow, or segment-review workflows.', items:[['Code buttons','Click a code to toggle it on or off for the active transcript row. Selected codes are highlighted and stored in the row-level Code field. Uncoded transcript rows show an open-circle (○) Code hotspot at the right edge; Command-Option/Ctrl-Alt-click it to add the first Code. On existing Code icons, plain click shows the Code name, Command/Ctrl-click replaces or deletes the clicked Code, and Command/Ctrl-Option/Alt-click adds another Code from the palette.'],['Follow coordination','When Follow is on, the active row can shift with the currently followed transcript line, so the highlighted Code buttons reflect that line.'],['Transcript playback','Command-click / Ctrl-click a row plays the active row or selected row range once. Command-Option-click / Ctrl-Alt-click repeats the active row or selected row range until Escape or Shift-Space.'],['Section headers','Outside edit mode, click any section header to hide or show only the Code buttons belonging to that section. The triangle shows whether the section is expanded or collapsed, and each section remembers its state in the project.'],['Edit pencil','Toggle code-edit mode. Edit mode temporarily reveals all Code buttons so you can add codes before/after the selected code, add section dividers, delete items, and drag-reorder the palette.'],['Import/export codes','Use Files → Project to import or export reusable Code sets without changing existing row-level codes.']]},
       notes: {title:'Line Note pane help', preamble:'The Line Note pane stores line-level analytic comments for the active transcript row. Command/Ctrl-/ opens the active line note in a popdown below the transcript row. Line Notes can use rich-text formatting for project save and RTF export, but they are not exported in TSV or ELAN.', items:[['Editing comments','Click in the Line Note area and type. The comment belongs to the currently active transcript row.'],['Rich-text formatting','Use the Transcript pane formatting tools for bold, italic, color, and clear formatting while the Line Note field is active.'],['Autosave/project save','Line Note formatting is preserved in autosave and project JSON.'],['RTF export','Transcript RTF export preserves Line Note formatting. TSV and ELAN exports omit Line Notes.'],['Follow caution','If Follow is on during playback, the active row may change. Pause or use segment hold when writing detailed comments for a specific row.']]},
       log: {title:'Project Note pane help', preamble:'The Project Note pane is a project-level rich-text notebook. It is not tied to a transcript line and is not included in TSV or ELAN exports. Command/Ctrl-Option/Alt-\ opens the same Project Note in a larger red-highlighted popdown below the active transcript row; the prior Command/Ctrl-Shift-\ shortcut is also accepted. Esc closes it and writes the content back to this pane.', items:[['Editing the Project Note','Click in the Project Note area and type general session notes, project decisions, calibration observations, or analytic memos.'],['Fr-Clip links','Fr-Clip captures add a clickable project-file link to the Project Note. Clicking the link asks Gravar to open that saved frame from the current Project folder.'],['Rich-text formatting','Use the Transcript pane formatting tools for bold, italic, color, and clear formatting while the Project Note field is active.'],['Project save/autosave','The Project Note is preserved in Gravar project JSON and autosaves.'],['Export Project Note','Use Files → Export Project Note to save the Project Note as a separate RTF file.'],['Not row-linked','Changing the active transcript row does not change the Project Note content.']]},
       popouts: {title:'Pop pane help', preamble:'The Pop pane gathers detached-window controls in one place so Video and Transcript panes can stay focused on their own editing/display tools.', items:[['Video Pop','Toggle the muted synchronized video pop-out window on/off. When Load V2 is active, the pop-out can show videos side by side or stacked V1 above V2. The bottom strip shows current time, progress, and duration.'],['Text Pop / Front / Close','Open, bring forward, or close the editable transcript pop-out window.'],['Main-window placeholder','When the video pop-out is open, the main video area shows a lightweight placeholder to reduce rendering pressure.'],['Shortcuts and web tips','The video pop-out supports Shift-Space, Command/Ctrl arrow scrubbing, Command/Ctrl-Shift arrow jumps, fullscreen with F, and Option + hover web tips (Alt + hover on non-Mac systems) on V1, V2, controls, the stage, and the running-time strip.']],},
@@ -20378,7 +20461,7 @@ input[data-field="speaker"]{padding-top:calc(var(--transcript-pad-top,5px) + 4px
 </head>
 <body>
 <div class="top" title="Transcript pop-out toolbar. Use these controls for Speaker style, child-tier behavior, chronological sort, and refresh from main Gravar."><strong title="Editable transcript pop-out synchronized with the main transcript">Gravar Transcript</strong><span class="popout-tools"><span class="speaker-style-mini" title="Style the focused Speaker field in this pop-out. Transcript text inherits the Speaker style in both windows."><span>Speaker</span><button id="speakerItalicPopout" title="Toggle italic for the focused Speaker field. Italic Speaker rows become child tiers; toggling italic turns Child tiers on if needed.">I</button><select id="speakerColorPopout" title="Set color for the focused Speaker field"><option value="">color</option><option value="green">green</option><option value="blue">blue</option><option value="red">red</option><option value="purple">purple</option><option value="orange">orange</option><option value="gray">gray</option></select></span><span class="child-tier-mini" title="Parent/child tier controls synced with the main Transcript pane."><label title="When checked, italicized Speaker rows and transcript rows beginning with double parentheses can become child tiers under the just-prior parent tier."><input id="childTierModePopout" type="checkbox"> Child tiers</label><label title="When checked, copy and enforce parent-tier Start/Stop/Dur values on all child tiers under that parent tier, including double-parentheses child tiers. When unchecked, child tiers keep their own timecodes."><input id="forceParentTimecodesPopout" type="checkbox"> Force PT</label></span><button id="sortStartPopout" title="Sort transcript rows chronologically by Start time">sort-Start</button><button id="refreshPopout" title="Refresh this pop-out from the main transcript state">Refresh</button><span title="Edits in this pop-out update the main transcript, and main-window edits sync back here.">Edits sync with main window</span></span></div>
-<div class="wrap" title="Transcript pop-out workspace. Timing fields are on the left; transcript text, group hairlines, code markers, and note markers are on the right."><div class="timing" id="timeRows" title="Timing fields. Command/Ctrl-click Start/End to seek; Command/Ctrl-Option/Alt-click Start/End to insert current time."></div><div class="transcripts" id="transcriptRows" title="Transcript rows. Command/Ctrl-click row text to play the row segment; drag line numbers to reorder; group hairlines and code markers show row annotations."></div></div>
+<div class="wrap" title="Transcript pop-out workspace. Timing fields are on the left; transcript text, group hairlines, code markers, and note markers are on the right."><div class="timing" id="timeRows" title="Timing fields. Command/Ctrl-click Start/End to seek; Command/Ctrl-Option/Alt-click Start/End to insert current time."></div><div class="transcripts" id="transcriptRows" title="Transcript rows. Line Note: Command/Ctrl-\. Project Note: Command-Option/Ctrl-Alt-\ (Command/Ctrl-Shift-\ also accepted). Command/Ctrl-click row text to play the row segment; drag line numbers to reorder; group hairlines and code markers show row annotations."></div></div>
 <script>
 try{if(window.opener && window.opener.XWebTips) window.opener.XWebTips.install(document);}catch(err){}
 let rows=[];
@@ -21303,7 +21386,7 @@ function render(){
 
     const line=document.createElement('div');
     line.className='tr-row'+(isComment ? ' comment-row' : '')+(!isComment && isChildTierRow(row) ? ' child-tier-row' : '');
-    line.title='Transcript line. Click to select; Shift-click selects a range; Command/Ctrl-click plays this row or the selected row range once; Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space.';
+    line.title='Transcript line. Click to select; Shift-click selects a range; Command/Ctrl-click plays this row or the selected row range once; Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted).';
     line.dataset.row=row.id;
     line.onclick=e=>{
       if(e.target.classList.contains('tr')){
@@ -21318,7 +21401,7 @@ function render(){
     ta.className='tr';
     ta.dataset.rowId=row.id;
     ta.dataset.field='transcript';
-    ta.title='Transcript text for this line. Option-Return splits the line at the cursor. Command/Ctrl-click plays this row or selected row range once; Command/Ctrl-Option/Alt-click repeats this row or selected row range until Escape or Shift-Space; Shift-click selects a range.';
+    ta.title='Transcript text for this line. Option-Return splits the line at the cursor. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted). Command/Ctrl-click plays this row or selected row range once; Command/Ctrl-Option/Alt-click repeats this row or selected row range until Escape or Shift-Space; Shift-click selects a range.';
     ta.value=plainText(row.transcript||'');
     applySpeakerStyleToTranscriptField(row, ta);
     ta.rows=1;
@@ -28728,7 +28811,7 @@ function XEnsureVClipDrawingOverlay135(spec){
    Keeps visible build surfaces synchronized with XBuild at startup.
 ========================= */
 (function(){
-  const EXPECTED_VERSION='0.6.204';
+  const EXPECTED_VERSION='0.6.207';
   const EXPECTED_LABEL='Standalone Web';
   function syncBuildLabels(){
     try{

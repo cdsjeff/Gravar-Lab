@@ -1,4 +1,29 @@
+
+## Gravar v0.6.207 — Modifier-Safe Web Tips (2026-11-16)
+- Option/Alt-hover web tips now appear only when Option/Alt is the sole modifier.
+- Holding Command/Ctrl/Shift with Option/Alt immediately hides the web tip, preventing interference with Project Note, coding, waveform, and video shortcuts.
+- Preserves the existing Option-hover help convention and note shortcut descriptions.
 # Gravar Changelog
+
+## v0.6.206 — 2026-11-16 — Note Shortcut Web Tips
+
+- Added the **Line Note** keyboard shortcut to the Line Note button Option/Alt-hover web tip: **Command-\** on macOS (**Ctrl-\** elsewhere).
+- Added the **Project Note** keyboard shortcut to the Project Note button web tip: **Command-Option-\** on macOS (**Ctrl-Alt-\** elsewhere); the prior **Command/Ctrl-Shift-\** alias is also identified.
+- Added both note shortcuts to transcript-line and transcript-text web tips in the main transcript.
+- Added the same shortcut information to transcript-line/text tips in the Transcript pop-out.
+- Preserved Option/Alt-hover gating; no native ordinary-hover tooltips were reintroduced.
+- Updated build/About/Help version metadata. Both embedded JavaScript blocks pass syntax validation.
+
+## v0.6.205 — 2026-11-16 — Empty-Code Hotspot
+
+- Added a small muted **open-circle (`○`) Code hotspot** at the far-right Code-marker area of every non-comment transcript row that has no assigned user Code.
+- **Command-Option-click** on macOS (**Ctrl-Alt-click** elsewhere) opens the same Add Code palette used by Command-Option-clicking an existing Code marker.
+- The hotspot is removed automatically as soon as a real Code is added and returns when the final Code is removed.
+- Reused the existing modular **`XCodeIconMenu`** add-code pathway rather than introducing a second coding mechanism.
+- Reserved marker-lane width for the empty hotspot so it remains visually distinct from the Line Note marker.
+- Added accessibility labeling and Gravar Option-hover web-tip metadata for the empty hotspot.
+- Updated Transcript/Code Help and current-version metadata.
+- Both embedded JavaScript blocks pass syntax validation; targeted source assertions confirm full-render and incremental-render hotspot handling.
 
 ## v0.6.204 — 2026-11-15 — Shared Default Code System
 
