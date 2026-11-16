@@ -1,5 +1,38 @@
 # Gravar Changelog
 
+## v0.6.204 — 2026-11-15 — Shared Default Code System
+
+- Made the supplied `gravar-shared-codes.json` the built-in default Coding palette for fresh Gravar projects.
+- The default palette contains **23 rows: 18 Codes and 5 section headers**.
+- Preserved the supplied section titles, Code labels, styles, ordering, collapsed states, IDs, and active selection.
+- Default sections are **DEAN**, **Todd minspeak (home dev)**, **Linda (home dev)**, **Pre-emptive & Transition**, and **Embodied**.
+- Added **`XCodeDefaults`** as the single authority for the built-in Code baseline and migration rules.
+- Exact legacy Gravar built-in `question / answer / repair / overlap` palettes automatically migrate to the new default when older projects are loaded.
+- Genuinely customized project Code palettes are preserved and continue to load project-specifically.
+- Moved Code project persistence into an **`XProjectState` adapter**, continuing the modular architecture and removing direct Code-palette save/load ownership from `XFiles`.
+- Legacy top-level Code/filter fields are still written for backward compatibility.
+- Included the reusable default Code JSON in the Current Resources ZIP as `gravar-shared-codes.json`.
+- Updated Help/About/version metadata and validated both embedded JavaScript blocks.
+
+## v0.6.203 — 2026-11-15 — Project Menu Spacing
+
+- Added a subtle **2-pixel gap** between the **Codes & Symbols** and **Project files** roll-down headers under Files → Project.
+- The gap creates a thin horizontal separation so the two menus read as distinct controls without restoring the removed white backing subpane.
+- No Project-menu behavior, roll-down behavior, file-status logic, or tooltip behavior changed.
+- Updated current-version metadata and validated both embedded JavaScript blocks.
+
+## v0.6.202 — 2026-11-15 — Project Pane and Web Tip Cleanup
+
+- Simplified **Files → Project** so the core Project controls appear directly beneath the selected Project tab; removed the redundant inner **Project** accordion/header.
+- Kept **Codes & Symbols** and **Project files** as independent roll-downs below the Project controls.
+- Removed the shared white backing subpane that visually joined Project, Codes & Symbols, and Project files; the roll-down headers now sit directly in the Files pane.
+- Fixed the remaining ordinary-hover browser tooltips. Static and dynamically assigned `title` attributes are migrated into Gravar's own `data-gravar-webtip` metadata and removed from the live DOM.
+- **Option + hover** on macOS (Alt + hover elsewhere) remains the only contextual web-tip gesture; Command is not required. Releasing the modifier, moving away, or window blur hides the Gravar tip.
+- Added an early `XWebTips.install(document)` pass plus a MutationObserver for later `title` assignments and newly inserted controls, preventing the browser's native light-grey tooltip layer from reappearing.
+- Updated Files Help and Web Tips Help to describe the simplified Project pane and the complete suppression of native browser tooltips.
+- Preserved Project name persistence, Project files path/status behavior, Codes/Symbols roll-down behavior, long-video calibration, expanded default Symbols, verified manual Save location, and the modular/message-passing core.
+- Both embedded JavaScript blocks passed syntax validation and targeted structural assertions passed. A full headless Chromium DOM test could not be completed in the container because Chromium did not produce a usable DOM dump in its system/DBus environment.
+
 ## v0.6.201 — 2026-11-13 — Option-Hover Web Tips
 
 - Changed Gravar's contextual web tips so **ordinary hover stays quiet**.

@@ -2,6 +2,28 @@
 
 > **Dating note:** Dates below are based on the Gravar development record available in this project. Where an exact release date was not recorded, the revision remains under **Date not recorded** rather than being assigned an invented date.
 
+## 2026-11-15
+
+### v0.6.204 — Shared Default Code System
+
+- Fresh projects now start with the supplied shared Gravar Code system: 18 Codes plus 5 section headers.
+- Preserved the supplied DEAN, Todd minspeak (home dev), Linda (home dev), Pre-emptive & Transition, and Embodied organization and styles.
+- Exact legacy built-in question/answer/repair/overlap palettes migrate automatically; customized project Code palettes are preserved.
+- Added `XCodeDefaults` and moved Code persistence/migration into an `XProjectState` adapter.
+- Included `gravar-shared-codes.json` in the Current Resources package.
+
+### v0.6.203 — Project Menu Spacing
+
+- Added a 2-pixel visual gap between the Codes & Symbols and Project files roll-down headers in Files → Project.
+- Preserved all existing roll-down behavior and the borderless Project-pane layout.
+
+### v0.6.202 — Project Pane and Web Tip Cleanup
+
+- Project controls now appear directly beneath the selected Project tab with no second Project accordion/header.
+- Codes & Symbols and Project files remain independent roll-downs, but the shared white backing subpane has been removed.
+- Native browser `title` tooltips are migrated out of the live DOM, eliminating the light-grey ordinary-hover tips.
+- Option + hover on macOS (Alt elsewhere) remains the deliberate Gravar web-tip gesture; Command is not required.
+
 ## 2026-11-13
 
 ### v0.6.201 — Option-Hover Web Tips
