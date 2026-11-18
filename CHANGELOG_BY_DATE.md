@@ -7,6 +7,13 @@
 
 > **Dating note:** Dates below are based on the Gravar development record available in this project. Where an exact release date was not recorded, the revision remains under **Date not recorded** rather than being assigned an invented date.
 
+## 2026-11-17
+
+### v0.6.208 — Project Home Folder Focus
+- Project Load in Chrome/Edge now remembers the directory containing the selected Project JSON as the picker home for the next Save, Designate, or Reconnect chooser.
+- The writable Project folder is still established only after explicit directory authorization.
+- Transcript-line/text web tips now include Option-Return = split at the text cursor into a new row below.
+
 ## 2026-11-16
 
 ### v0.6.206 — Note Shortcut Web Tips

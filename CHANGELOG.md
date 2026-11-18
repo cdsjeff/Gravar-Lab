@@ -1,3 +1,11 @@
+## Gravar v0.6.208 — Project Home Folder Focus (2026-11-17)
+- Chrome/Edge Project Load now uses a File System Access picker with a shared project-home ID.
+- The directory containing the Project JSON becomes the remembered picker home for the next manual Save, Designate, or Reconnect chooser.
+- The browser still requires explicit folder authorization before Gravar treats that location as the writable Project folder; no hidden write access is inferred from opening a file.
+- The standard `<input type="file">` Project Load remains the fallback where File System Access is unavailable (including Safari).
+- Transcript-line/text Option-hover tips now state that **Option-Return** splits the line at the text cursor into a new row below, in both the main transcript and Transcript pop-out.
+- Added a diagnostic for the shared project-home picker path. Both embedded JavaScript blocks pass syntax validation.
+
 
 ## Gravar v0.6.207 — Modifier-Safe Web Tips (2026-11-16)
 - Option/Alt-hover web tips now appear only when Option/Alt is the sole modifier.

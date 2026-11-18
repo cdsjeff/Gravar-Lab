@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-Gravar v0.6.207 — Note Shortcut Web Tips
+Gravar v0.6.208 — Project Home Folder Focus
 Single-file web app with modular internal architecture.
 
 Current release highlights:
@@ -24,6 +24,8 @@ Current release highlights:
 - Line Note and Project Note shortcuts are included in the Option/Alt-hover tips for their buttons and for transcript lines/text fields in both the main transcript and transcript pop-out.
 - Play button cursor is now a normal pointer unless the playback-speed modifier is actively held (Command on macOS; Ctrl on non-Mac platforms).
 - Manual Save now always opens the Project-folder selection window first in Chrome/Edge so the save location can be verified; autosave remains automatic and silent.
+- In Chrome/Edge, loading a Project JSON through Gravar now remembers that containing directory as the project picker home; the next Save, Designate, or Reconnect chooser opens focused there before the user authorizes a writable Project folder.
+- Transcript-line Option-hover help now states that Option–Return splits the line at the text cursor into a new row below.
 - Contextual web tips require Option + hover on macOS (Alt + hover on non-Mac systems). Native browser title tooltips are globally suppressed so ordinary hover stays completely quiet in the main app and pop-outs.
 - Centralized current-version metadata used by title, About, Help, project metadata, and V-Clip metadata.
 
@@ -51,7 +53,7 @@ Primary UI/application modules:
 - XScrollSync
 - XApp
 
-Architecture note for v0.6.207:
+Architecture note for v0.6.208:
 - Cross-cutting rules are being moved from large UI modules into small single-responsibility services.
 - New cross-module behavior should prefer XBus messages or explicit service APIs over direct mutation of another UI module.
 - Project-state extensions should register with XProjectState rather than monkey-patching XFiles.payload().
@@ -60,7 +62,7 @@ Architecture note for v0.6.207:
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>Gravar — Version 0.6.207 Standalone Web</title>
+<title>Gravar — Version 0.6.208 Standalone Web</title>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <style>
 :root{
@@ -3047,7 +3049,7 @@ input[type=reset],
 <div class="files-submenu-content">
 <div class="files-submenu-panel files-project-panel active" data-files-panel="project">
 <div class="files-project-controls-direct" id="projectControlsRollupContent" aria-label="Project controls">
-<label class="filebtn" for="projectFile" title="Load Gravar project JSON">Load</label><input accept=".json,application/json" id="projectFile" title="Load Gravar project JSON" type="file"/>
+<label class="filebtn" for="projectFile" id="loadProjectButton" title="Load Gravar project JSON. In Chrome/Edge, the folder used here becomes the remembered project home for the next Save, Designate, or Reconnect chooser.">Load</label><input accept=".json,application/json" id="projectFile" title="Load Gravar project JSON" type="file"/>
 <button id="saveProject" title="Save project JSON to Project folder or download">Save</button>
 <button id="closeProject" title="Close current project">Close</button>
 <button id="chooseDataFolder" title="Choose Project folder for project files, autosaves, and exports">Folder</button>
@@ -3197,7 +3199,7 @@ input[type=reset],
 <div class="info-popup-body">
 <div class="left-pane-title"><span class="left-pane-title-text">About</span><button class="pane-help-btn" data-pane-help="about" title="About pane help">?</button></div>
 <p><strong>Gravar</strong> is a browser-based video transcription workspace for detailed interaction analysis. It is designed for timed transcript construction while viewing video, inspecting the audio waveform, and recording line-level talk/action notes.</p>
-<p id="aboutCurrentVersion"><strong>Current version:</strong> Gravar 0.6.207 — Standalone Web. Option/Alt-hover web tips now stay hidden whenever Command/Ctrl/Shift is also held, so shortcuts remain unobstructed.</p>
+<p id="aboutCurrentVersion"><strong>Current version:</strong> Gravar 0.6.208 — Standalone Web. In Chrome/Edge, opening a Project JSON now establishes a remembered picker home so the next Save, Designate, or Reconnect chooser opens focused on that project folder; transcript-line web tips also identify Option-Return as Split line.</p>
 <p>The app runs locally in the browser as a single HTML file. Project data is saved separately as JSON, with optional TSV/CSV export for use in spreadsheets or other analysis tools.</p>
 <p>Major functions include video loading, waveform navigation, transcript rows with Start/End/Speaker fields, editable transcript pop-out, video pop-out, transcript pop-out, symbol insertion, autosave, TSV/CSV/RTF export, and diagnostics.</p>
 <h3>License</h3>
@@ -3217,12 +3219,12 @@ input[type=reset],
 <button class="soft" id="downloadFormattedHelp" title="Download the updated Help/User Manual as a formatted, scrollable HTML file that documents current Gravar features and can be printed or saved as PDF.">Download User Manual</button>
 </div>
 <h3>Gravar help guide and user manual</h3>
-<p id="helpCurrentVersion"><strong>Current version:</strong> Gravar 0.6.207 — Standalone Web.</p>
+<p id="helpCurrentVersion"><strong>Current version:</strong> Gravar 0.6.208 — Standalone Web.</p>
 <p><strong>Gravar</strong> is a browser-based workspace for detailed video/audio transcription and interaction analysis. It combines synchronized media playback, transcript timing, waveform inspection, transcript-linked coding, comments, group/span indicators, pop-out displays, project saving, and structured exports in a single local HTML application.</p>
 <h3>Basic workflow</h3>
 <ol>
 <li>Open <strong>Files → Import</strong> and load a primary video, optional V2, WAV/audio, DOTE JSON, TSV, ELAN TSV, or saved project.</li>
-<li>Use <strong>Files → Project → Folder</strong> to designate a working Project folder when browser support is available. Each manual <strong>Save</strong> also opens the folder chooser first so you can verify or change the target folder before the project JSON is written. That selected folder is then used for autosaves, ordinary exports, and frame clips.</li>
+<li>Use <strong>Files → Project → Folder</strong> to designate a working Project folder when browser support is available. In Chrome/Edge, loading a Project JSON through Gravar remembers that containing directory as the project picker home; the next <strong>Save</strong>, <strong>Designate</strong>, or <strong>Reconnect</strong> chooser opens focused there. Each manual Save still requires you to approve the writable folder before anything is written. That selected folder is then used for autosaves, ordinary exports, and frame clips.</li>
 <li>Build transcript rows in the bottom timing/transcript workspace. Each row keeps Start, End, Duration, Speaker, Transcript, Code, Line Note, group-span membership, and child-line metadata together.</li>
 <li>Use <strong>Video</strong> and <strong>Wave</strong> for zooming, panning, scrubbing, waveform navigation, timing calibration, drag-duration measurement, and waveform-based row creation.</li>
 <li>Use the right pane for <strong>Code</strong>, <strong>Line Note</strong>, <strong>Project Note</strong>, <strong>Symbols</strong>, and <strong>Group</strong> tools.</li>
@@ -3775,6 +3777,7 @@ input[type=reset],
 /* Gravar V0.6.204: makes the supplied shared Code system the built-in default, adds legacy-default migration while preserving customized project Code palettes, and moves Code persistence into XProjectState. */
 /* Gravar V0.6.205: adds a neutral open-circle Code hotspot to uncoded transcript rows; Command/Ctrl-Option/Alt-click opens the existing Add Code palette without creating a second coding pathway. */
 /* Gravar V0.6.207: prevents Option/Alt-hover web tips from appearing during Command/Ctrl/Shift modified shortcuts, keeping note and coding gestures unobstructed. */
+/* Gravar V0.6.208: uses a shared File System Access picker ID so Project Load establishes the remembered home directory for the next Save/Designate/Reconnect chooser in Chrome/Edge; adds Option-Return split-line guidance to transcript web tips. */
 /* Gravar V0.6.170: adds a Safari-specific Save As workflow and explains that imported-file folders cannot be reused as writable project folders. */
 /* Gravar V0.6.171: performs one final autosave at the 5-minute inactivity boundary before pausing; re-prompts for stale/missing Project-folder authorization on Save; synchronizes autosave numbering with the designated folder; and archives excess backups for every Gravar autosave series in that folder. */
 /* Gravar V0.6.173: adds an Electron desktop file-system bridge, aligns the initial Project folder to the first user-selected project/media/transcript file, preserves Command-M for Merge, and attaches media before optional browser recovery storage so storage cannot block playback. The same HTML remains browser-compatible. */
@@ -3784,9 +3787,9 @@ input[type=reset],
 ========================= */
 const XBuild = Object.freeze({
   appName: 'Gravar',
-  version: '0.6.207',
+  version: '0.6.208',
   label: 'Standalone Web',
-  description: 'This build adds the Line Note and Project Note keyboard shortcuts to their Option/Alt-hover web tips and to transcript-line tips in the main transcript and transcript pop-out. Existing Code hotspot behavior, default Codes/Symbols, Project behavior, long-video calibration, and verified manual Save behavior are preserved.',
+  description: 'This build remembers the folder used to open a Project JSON as the browser picker home for the next manual Save, Designate, or Reconnect in Chrome/Edge, and adds Option-Return split-line guidance to transcript-line web tips. Existing modifier-safe web tips, Code hotspot behavior, default Codes/Symbols, long-video calibration, and verified manual Save behavior are preserved.',
   title(){
     return this.appName+' — Version '+this.version+' '+this.label;
   },
@@ -4028,6 +4031,7 @@ const XState = {
   projectExpectedFolderName: '',
   projectReconnectHandle: null,
   projectReconnectData: null,
+  preferProjectHomePickerOnNextFolderChoice: false,
   projectFilePathMode: 'short',
   projectFileLocations: null,
   workspaceDirHandle: null,
@@ -4100,6 +4104,7 @@ const XDom = {
     this.secondaryVideoVisibleToggle=this.q('secondaryVideoVisibleToggle');
     this.audioFile=this.q('audioFile');
     this.projectFile=this.q('projectFile');
+    this.loadProjectButton=this.q('loadProjectButton');
     this.tsvFile=this.q('tsvFile');
     this.doteFile=this.q('doteFile');
     this.appendProjectFile=this.q('appendProjectFile');
@@ -7785,7 +7790,7 @@ const XTranscript = {
 
       const line=document.createElement('div');
       line.className='tr-row'+(isComment ? ' comment-row' : '')+(!isComment && this.isChildTierRow && this.isChildTierRow(row) ? ' child-tier-row' : '');
-      line.title='Transcript line. Click to select; Shift-click selects a range; Command/Ctrl-click plays this row or the selected row range once; Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted).';
+      line.title='Transcript line. Option-Return splits at the text cursor into a new row below. Click to select; Shift-click selects a range; Command/Ctrl-click plays this row or the selected row range once; Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted).';
       line.dataset.row=row.id;
       line.onclick=e=>{
         if(e.target.classList.contains('tr')){
@@ -7797,7 +7802,7 @@ const XTranscript = {
       };
 
       const transcript=XRichText.makeEditable(row,'transcript','Transcript','tr');
-      transcript.title='Transcript text for this line. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted). Command/Ctrl-click plays this row or selected row range once; Command/Ctrl-Option/Alt-click repeats until Escape or Shift-Space.';
+      transcript.title='Transcript text for this line. Option-Return splits at the text cursor into a new row below. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted). Command/Ctrl-click plays this row or selected row range once; Command/Ctrl-Option/Alt-click repeats until Escape or Shift-Space.';
       this.applySpeakerStyleToTranscriptField(row, transcript);
       transcript.onclick=e=>{
         XRichText.setActive(transcript,row,'transcript');
@@ -14307,11 +14312,11 @@ const XPaneHelp = {
 
   help(){
     return {
-      files: {title:'Files pane help', preamble:'The Files pane manages project identity, file loading, reusable code/symbol sets, imports, exports, diagnostics, and autosave behavior. It is organized into click-selected submenus: Project, Import, Export, Diag, and Auto. Project files still save the active Code and Symbols palettes, but reusable Code and Symbols sets can also be imported/exported as independent JSON files. Workspace Setup can create shared Codes-Symbols, FrameClips, VideoClips, and Projects folders.', items:[['Submenu row','Use Project, Import, Export, Diag, and Auto to switch the visible Files controls without leaving the Files pane.'],['Project name','A single persistent Project name field is always visible at the bottom of the Files pane on Project, Import, Export, Diag, and Auto. It sets the base name used for project JSON, autosaves, and export filenames.'],['Project row: Load / Save / Close / Designate / Reconnect / Setup','These controls appear directly below the selected Project tab; there is no second Project accordion/header. Reconnect is normally hidden. When a loaded project remembers a Project folder that Gravar cannot currently access, Reconnect appears. Approving it restores folder access and automatically searches that folder for saved V1, V2, and external-audio filenames without clearing waveform calibration.'],['Project files','Appears below Codes & Symbols in Files → Project and is collapsed by default. Click the Project files header to open it. It shows Project JSON, transcript source, V1, V2, and audio with ✓ Loaded/Saved, ± Reference, ✕ Missing/Failed, or — None. Click any pathname to show a wrapped, selectable pathname below the list. Use Path: Last 3 / Path: Full to toggle the display. Full means the fullest path Gravar can know; ordinary web browsers often hide the macOS /Users/... absolute path, so Project-folder-relative or filename-only locations may be shown.'],['Codes & Symbols row','Imports or exports reusable Code and Symbols JSON files. After Workspace Setup, exports go directly to the Codes-Symbols folder and imports open there when the browser supports it. Project JSON still saves the current Codes and Symbols automatically.'],['Import codes / Export codes','Imports or exports the current Code palette as a reusable JSON file. Gravar asks the user to choose the file or save location each time, so it does not persistently store a code-symbol folder. Existing row-level Code values are not changed by importing a new Code palette.'],['Import symbols / Export symbols','Imports or exports the current Symbols palette as a reusable JSON file. Gravar asks the user to choose the file or save location each time, while each project still saves its own current Symbols palette.'],['Load video','Loads a local V1 media file. If automatic project media restore fails, use Project → Reconnect first when offered; Gravar will search the approved Project folder for V1, V2, and external audio. Manually reloading the same saved V1 also preserves calibration, while a different V1 resets it. MP4/H.264/AAC remains the safest browser-compatible format.'],['Load TSV / Append project / Load ELAN TSV','Load TSV replaces current transcript rows. Append project adds rows from another Gravar project JSON while preserving row formatting, Code values, Line Notes, and timing precision. Load ELAN TSV transforms ELAN Tier/Speaker/Onset/Offset/Annotation rows into timed transcript rows.'],['Waveform calibration','Files → Import → Waveform calibration opens the same calibration-recovery file chooser as Wave → Waveform calibration → Import. It imports only saved waveform alignment/calibration from an older Gravar project JSON and leaves the current transcript, media assignment, codes, notes, and other project settings unchanged.'],['Export TSV / XLS / RTF / Project Note / Comments / Transcript+Comment / ELAN','Exports transcript, comments, Project Note, spreadsheet-readable, V-CLIP JSON, or ELAN files. TSV is plain text, XLS opens in Excel with rich-text styling and hidden gridlines, RTF preserves formatted text, ELAN creates an .eaf file. V-Clip is now located in the Video tools beside Fr-Clip and saves a start/end-time JSON spec for an external clip maker; after Workspace Setup it saves to VideoClips/[Project], otherwise the first V-Clip export in a session asks for a V-Clip folder used only for V-Clip specs. Project-folder saving is preferred for the other export formats when available.'],['Diagnostics / Stress tests / Clear diag','Runs status checks and non-destructive stress tests. Stress tests exercise core functions and waveform behavior, then report results in the diagnostic panel.'],['Autosave','Controls autosave interval and how many numbered autosaves to keep before older files move to Old_files. Autosaves use the Project folder when available. After 5 minutes without typing, clicking, or video playback, Gravar performs one final autosave and then pauses until activity resumes.']]},
+      files: {title:'Files pane help', preamble:'The Files pane manages project identity, file loading, reusable code/symbol sets, imports, exports, diagnostics, and autosave behavior. It is organized into click-selected submenus: Project, Import, Export, Diag, and Auto. Project files still save the active Code and Symbols palettes, but reusable Code and Symbols sets can also be imported/exported as independent JSON files. Workspace Setup can create shared Codes-Symbols, FrameClips, VideoClips, and Projects folders.', items:[['Submenu row','Use Project, Import, Export, Diag, and Auto to switch the visible Files controls without leaving the Files pane.'],['Project name','A single persistent Project name field is always visible at the bottom of the Files pane on Project, Import, Export, Diag, and Auto. It sets the base name used for project JSON, autosaves, and export filenames.'],['Project row: Load / Save / Close / Designate / Reconnect / Setup','These controls appear directly below the selected Project tab; there is no second Project accordion/header. In Chrome/Edge, Load uses a project-home-aware file picker: the directory containing the chosen Project JSON becomes the remembered picker home for the next Save, Designate, or Reconnect chooser. The browser does not expose that parent folder directly to Gravar, so the user still authorizes the directory when the folder chooser opens. Reconnect is normally hidden. When a loaded project remembers a Project folder that Gravar cannot currently access, Reconnect appears. Approving it restores folder access and automatically searches that folder for saved V1, V2, and external-audio filenames without clearing waveform calibration.'],['Project files','Appears below Codes & Symbols in Files → Project and is collapsed by default. Click the Project files header to open it. It shows Project JSON, transcript source, V1, V2, and audio with ✓ Loaded/Saved, ± Reference, ✕ Missing/Failed, or — None. Click any pathname to show a wrapped, selectable pathname below the list. Use Path: Last 3 / Path: Full to toggle the display. Full means the fullest path Gravar can know; ordinary web browsers often hide the macOS /Users/... absolute path, so Project-folder-relative or filename-only locations may be shown.'],['Codes & Symbols row','Imports or exports reusable Code and Symbols JSON files. After Workspace Setup, exports go directly to the Codes-Symbols folder and imports open there when the browser supports it. Project JSON still saves the current Codes and Symbols automatically.'],['Import codes / Export codes','Imports or exports the current Code palette as a reusable JSON file. Gravar asks the user to choose the file or save location each time, so it does not persistently store a code-symbol folder. Existing row-level Code values are not changed by importing a new Code palette.'],['Import symbols / Export symbols','Imports or exports the current Symbols palette as a reusable JSON file. Gravar asks the user to choose the file or save location each time, while each project still saves its own current Symbols palette.'],['Load video','Loads a local V1 media file. If automatic project media restore fails, use Project → Reconnect first when offered; Gravar will search the approved Project folder for V1, V2, and external audio. Manually reloading the same saved V1 also preserves calibration, while a different V1 resets it. MP4/H.264/AAC remains the safest browser-compatible format.'],['Load TSV / Append project / Load ELAN TSV','Load TSV replaces current transcript rows. Append project adds rows from another Gravar project JSON while preserving row formatting, Code values, Line Notes, and timing precision. Load ELAN TSV transforms ELAN Tier/Speaker/Onset/Offset/Annotation rows into timed transcript rows.'],['Waveform calibration','Files → Import → Waveform calibration opens the same calibration-recovery file chooser as Wave → Waveform calibration → Import. It imports only saved waveform alignment/calibration from an older Gravar project JSON and leaves the current transcript, media assignment, codes, notes, and other project settings unchanged.'],['Export TSV / XLS / RTF / Project Note / Comments / Transcript+Comment / ELAN','Exports transcript, comments, Project Note, spreadsheet-readable, V-CLIP JSON, or ELAN files. TSV is plain text, XLS opens in Excel with rich-text styling and hidden gridlines, RTF preserves formatted text, ELAN creates an .eaf file. V-Clip is now located in the Video tools beside Fr-Clip and saves a start/end-time JSON spec for an external clip maker; after Workspace Setup it saves to VideoClips/[Project], otherwise the first V-Clip export in a session asks for a V-Clip folder used only for V-Clip specs. Project-folder saving is preferred for the other export formats when available.'],['Diagnostics / Stress tests / Clear diag','Runs status checks and non-destructive stress tests. Stress tests exercise core functions and waveform behavior, then report results in the diagnostic panel.'],['Autosave','Controls autosave interval and how many numbered autosaves to keep before older files move to Old_files. Autosaves use the Project folder when available. After 5 minutes without typing, clicking, or video playback, Gravar performs one final autosave and then pauses until activity resumes.']]},
       wave: {title:'Wave pane help', preamble:'The Wave pane controls waveform visibility, fixed time-frame display, temporary waveform nudging, saved calibration, and waveform drag interval tools. The calibration system has three separate layers: a temporary Wave± nudge, a saved absolute offset, and saved calibration points for drift. Drag interval tools help measure time spans or create transcript rows; calibration tools change the displayed waveform mapping only and do not alter the video or audio file.', items:[['Choose a usable view first','Set Frame to 10 sec or 5 sec for most calibration work. Use 2 sec when you need very fine alignment around a sharp sound. Use Whole video only for orientation.'],['Find clear alignment events','Use sharp acoustic landmarks: word onsets, loud syllables, taps, claps, clicks, or abrupt noises. Avoid long vowels, background noise, or ambiguous speech edges.'],['Amp− / Amp+','Adjust visual waveform height so peaks are readable. This changes display amplitude only.'],['Frame selector','Choose Whole video, 1 min, 30 sec, 10 sec, 5 sec, or 2 sec. Fixed frames show that amount of time around the current video time.'],['Vspeed selector','Choose the repeat speed for held frame-step buttons. This replaces the old persistent Vspeed transport button and uses the same frame-rate choices.'],['Waveform click','Seeks within the visible waveform frame. In Whole video mode the click maps across the full duration; in fixed-frame modes it maps within the visible time window.'],['Plain waveform drag','Scrubs the video at the current Vspeed pace while measuring a waveform interval, shows the duration on a compact bar just above the bottom scrub area, and copies the duration in seconds to the clipboard on release.'],['Command/Ctrl waveform drag','Scrubs the video at the current Vspeed pace while dragging and creates a new transcript row from the dragged waveform interval. The new row receives Start, End, and Duration and is placed chronologically by Start time.']], sections:[{title:'Procedure 1: Temporary local nudge without saving calibration', items:[['Purpose','Use this when you only need to inspect or code one local section and do not want to change the saved calibration model.'],['Step 1','Move to the location you want to inspect and choose a short frame such as 10 sec, 5 sec, or 2 sec.'],['Step 2','Use Wave− or Wave+ until the waveform peak visually lines up with the sound you hear. Each click moves the displayed waveform by 0.1 sec.'],['Step 3','Code or inspect that section. Do not click Abs or Pt.'],['Step 4','Click 0 when you want to remove only this temporary nudge. Saved absolute offset and saved calibration points are not changed.']]},{title:'Procedure 2: Set an absolute beginning offset', items:[['Purpose','Use this when the waveform is already early or late near the beginning of the file. This creates a constant baseline correction that applies throughout the recording.'],['Step 1','Go near the beginning of the recording, preferably within the first 10 to 30 seconds.'],['Step 2','Choose a short waveform frame, usually 10 sec or 5 sec.'],['Step 3','Find a clear acoustic landmark.'],['Step 4','Use Wave− or Wave+ until the waveform and sound align at that beginning location.'],['Step 5','Click Abs. Gravar saves the current temporary nudge as the absolute offset and resets the temporary Wave± nudge to 0.0 sec.'],['Rule','Use Abs for the beginning/global sync problem. Do not use Abs repeatedly across the video; later changes should be saved with Pt.']]},{title:'Procedure 3: Add a single drift point', items:[['Purpose','Use this when the beginning is aligned but the waveform becomes increasingly early or late later in the video.'],['Step 1','After setting Abs if needed, move to a later point where drift is visible, such as 5, 10, or 15 minutes.'],['Step 2','Choose a short frame such as 10 sec, 5 sec, or 2 sec and find a clear sound event.'],['Step 3','Use Wave− or Wave+ until the waveform aligns at that later location.'],['Step 4','Click Pt. Gravar saves a calibration point at the current video time using the current temporary nudge as the remaining local correction, then resets the temporary nudge to 0.0 sec.'],['Result','With one saved point, the residual drift correction grows toward that point rather than applying the same shift everywhere. Saved Point corrections are cumulative and are not limited by the temporary ±4-second Wave± nudge range.']]},{title:'Procedure 4: Build nonlinear multipoint calibration', items:[['Purpose','Use this when drift is not a single straight line across the recording. Multiple Pt values create piecewise interpolation between saved points.'],['Step 1','Set the beginning absolute offset first with Abs if the beginning is out of sync.'],['Step 2','Move to the first later problem area, align with Wave− or Wave+, then click Pt.'],['Step 3','Move farther ahead, align again with Wave− or Wave+, then click Pt.'],['Step 4','Repeat at each area where the waveform and sound diverge. Useful checkpoints for a 19-minute video are about 5:00, 10:00, 15:00, and 18:00.'],['Result','Gravar interpolates between saved points. If the correction changes direction or rate across the file, the waveform mapping can bend rather than follow one linear slope.'],['Tip','Points can be added in any order; Gravar sorts them by time internally. On long recordings, saved corrections may accumulate beyond ±4 seconds even though each temporary Wave± adjustment is limited to ±4 seconds.']]},{title:'Procedure 5: Check the calibration after setting points', items:[['Step 1','Reset the temporary Wave± nudge to 0.0 sec with the 0 button.'],['Step 2','Check several places between your saved points, not just at the points themselves.'],['Step 3','If the waveform is good at saved points but off between them, add another Pt between the two problem areas.'],['Step 4','If the whole file is consistently shifted by the same amount after calibration, adjust near the beginning and save a new Abs.'],['Step 5','If only one local area is off, add or update a Pt at that local time.']]},{title:'Procedure 6: Clear and restart calibration', items:[['Temporary reset','Click 0 to clear only the temporary Wave± nudge. This does not erase saved Abs or Pt calibration.'],['Undo last Point','Click Undo to reverse only the most recent Pt command. Gravar restores the prior saved point set and the temporary Wave± nudge used for that Point.'],['Full saved calibration reset','Click Clear to clear the saved absolute offset and all saved calibration points. The temporary Wave± nudge is left independent.'],['Recommended restart','After Clr, set the beginning sync with Abs, then add Pt values only where later drift is visible.']]}]},
       video: {title:'Video pane help', preamble:'The Video pane contains tools for main-window video display and the synchronized Video pop-out. The pop-out can optionally attach compact transport controls and a longer waveform so the analyst can keep video, waveform, and playback control in one visual field.', items:[['Fr-Clip','Opens a V1 / V2 / Both menu. V1 or V2 captures that video frame as a PNG; Both captures V1 and V2 together. After Workspace Setup, PNGs save to FrameClips/[Project] and add a clickable link in Project Note; otherwise Gravar uses the Project folder or download fallback.'],['V-Clip','Exports a JSON clip specification for the selected transcript interval or active row. The spec includes start/end times plus FFmpeg-ready crop, scale, brightness, contrast, color, and RGB filter recipes for reproducing the current zoomed/panned display. After Workspace Setup, specs save to VideoClips/[Project]; otherwise the first V-Clip export in a session asks for a V-Clip folder used only for V-Clip specs.'],['V1 visible / V2 visible','Shows or hides V1 or V2 in the main video pane without unloading media or changing playback, timing, waveform, or pop-out behavior.'],['Video Pop','Toggles the synchronized Video pop-out on and off. The pop-out is muted; audio and timing remain controlled by the main app.'],['Stack','Stacks V1 above V2 in both the main video pane and the Video pop-out. Uncheck it for side-by-side display in both places.'],['Controls','Attaches compact transport controls and a longer waveform to the Video pop-out. Transport/timing controls sit to the left of the waveform; compact unlabeled Video/Display/Waveform control rows sit to the right and send the same commands to the main app. The pop-out no longer has its own Controls button; turn attached controls off/on from the main Video pane.'],['Direct video gestures','Command/Ctrl-drag on a video zooms, plain drag pans after zooming, Command/Ctrl-Option/Alt-drag scrubs, and double-click resets zoom/pan.'],['Pop-out shortcuts','In the Video pop-out, F toggles fullscreen, Shift-Space plays/pauses, Command/Ctrl-Left/Right moves by 0.1 sec, and Command/Ctrl-Shift-Left/Right jumps by 1 sec.']]},
       ca: {title:'CA pane help', preamble:'The CA pane contains Conversation Analysis controls for parent/child tiers and copied transcript style buttons.', items:[['Child tiers','When Child tiers is checked, rows whose Transcript text begins with (( are child tiers under the nearest prior parent tier, rows beginning with a single ( are parent tiers, and italic Speaker rows can also be child tiers. When Child tiers is off, parentheses are ordinary transcript text and rows retain their own timecodes.'],['Force PT timecodes','When checked, child tiers under a parent tier are forced to use that parent tier’s Start/Stop/Dur values, including child tiers marked with double parentheses. When unchecked, child tiers retain their own Start/Stop/Dur values; merely becoming a child tier does not replace their timing.'],['Style buttons','B, I, color, and Clear use the same rich-text formatting functions as the Transcript pane.']]},
-      transcript: {title:'Transcript pane help', preamble:'The Transcript pane contains rich-text formatting, transcript display controls, transcript pop-out controls, and find/replace.', items:[['B / I / color buttons','Apply bold, italic, or selected color to the active rich-text field. Speaker-field italic/color styling is also inherited by the associated transcript line. Command/Ctrl-\ opens an inline Line Note popdown for the active transcript row; Command/Ctrl-Option/Alt-\ opens the Project Note popdown; Esc closes either popdown and writes changes back to the matching note panel.'],['Child tiers','Parentheses-based tier tagging applies only when Child tiers is checked: (( begins a child tier, a single ( begins a parent tier, and italic Speaker rows can also be child tiers. When Child tiers is off, parenthesized transcript text is treated as an ordinary full transcript line with its own timecodes. Child tiers retain their own Start/Stop/Duration unless Force PT timecodes is checked; Force PT applies equally to italic-Speaker and double-parentheses child tiers.'],['Clear','Removes rich-text formatting from the selected text in the active field.'],['Find / Replace','Choose Speaker or Transcript, enter literal Find text and optional replacement text, then use Find, Replace, or Replace all. Replace all is undoable with Command/Ctrl-Z.'],['Start/End shortcuts','Command-click / Ctrl-click a Start or End field seeks to that field time; Command-Option-click / Ctrl-Alt-click inserts the current time. Command-[ / Ctrl-[ sets Start; Command-] / Ctrl-] sets End for the active row.'],['Playback shortcuts','Command-click / Ctrl-click in a transcript text row plays that row or the selected row range once. Command-Option-click / Ctrl-Alt-click repeats that row or the selected row range until Escape or Shift-Space.'],['Follow coordination','When Follow is on, the active row and Code buttons coordinate with the current followed transcript row.']]},
+      transcript: {title:'Transcript pane help', preamble:'The Transcript pane contains rich-text formatting, transcript display controls, transcript pop-out controls, and find/replace.', items:[['B / I / color buttons','Apply bold, italic, or selected color to the active rich-text field. Speaker-field italic/color styling is also inherited by the associated transcript line. Command/Ctrl-\ opens an inline Line Note popdown for the active transcript row; Command/Ctrl-Option/Alt-\ opens the Project Note popdown; Esc closes either popdown and writes changes back to the matching note panel.'],['Child tiers','Parentheses-based tier tagging applies only when Child tiers is checked: (( begins a child tier, a single ( begins a parent tier, and italic Speaker rows can also be child tiers. When Child tiers is off, parenthesized transcript text is treated as an ordinary full transcript line with its own timecodes. Child tiers retain their own Start/Stop/Duration unless Force PT timecodes is checked; Force PT applies equally to italic-Speaker and double-parentheses child tiers.'],['Clear','Removes rich-text formatting from the selected text in the active field.'],['Find / Replace','Choose Speaker or Transcript, enter literal Find text and optional replacement text, then use Find, Replace, or Replace all. Replace all is undoable with Command/Ctrl-Z.'],['Start/End shortcuts','Command-click / Ctrl-click a Start or End field seeks to that field time; Command-Option-click / Ctrl-Alt-click inserts the current time. Command-[ / Ctrl-[ sets Start; Command-] / Ctrl-] sets End for the active row.'],['Playback and line shortcuts','Option-Return on Mac splits the focused transcript line at the text cursor into a new row below. Command-click / Ctrl-click in a transcript text row plays that row or the selected row range once. Command-Option-click / Ctrl-Alt-click repeats that row or the selected row range until Escape or Shift-Space.'],['Follow coordination','When Follow is on, the active row and Code buttons coordinate with the current followed transcript row.']]},
       workspace: {title:'Persistent workspace controls help', preamble:'The persistent workspace controls remain visible below the left pane regardless of which pane is open. They support timing, line management, Follow, frame stepping, playback, and rapid movement through the video.', items:[['Time display','Shows current time and total duration. Click the display to copy the current time.'],['Dur / LineDur','Dur inserts pause-duration rows between selected contiguous rows. LineDur computes row duration from End minus Start.'],['Follow','Highlights the current row during playback, keeps the primary followed row visible, and coordinates Code state with the followed line.'],['+line / +above / +below / del / Merge','Add, delete, or merge transcript rows. Shift-click rows to select a range before Merge or Dur.'],['[ and ]','Set Start and End from the current video time. Shortcuts: Command-[ / Ctrl-[ and Command-] / Ctrl-].'],['Transport row','Use −1s, frame back, Play, frame forward, and +1s for movement and playback. Command/Ctrl-Left/Right scrubs by 0.10 sec; Command-Shift/Ctrl-Shift-Left/Right jumps by 1.0 sec. Shift-Space toggles play/pause.'],['Playback','Command/Ctrl-click the Play button toggles play/pause; Command/Ctrl-Option/Alt-click starts playback from the focused row Start time; double-click Play resets playback speed to 100%.']], sections:[{title:'Transcript row fields', items:[['Start','The onset time for the row. The visible field rounds to tenths for readability, while internal/exported timing preserves millisecond precision. Command/Ctrl-click a Start field to seek the video to that Start time. Command-Option/Ctrl-Alt-click inserts the current video time into Start. Command-[ / Ctrl-[ also sets Start for the active row.'],['End / Stop','The offset time for the row. Command/Ctrl-click an End field to seek the video to that End time. Command-Option/Ctrl-Alt-click inserts the current video time into End. Command-] / Ctrl-] also sets End for the active row.'],['Dur','A computed display of End minus Start. Command/Ctrl-click a Dur field to insert that row duration. Click LineDur to compute or refresh row durations for all rows; exported durations preserve millisecond precision.'],['Speaker','The speaker or participant ID for the row. Speaker fields are right-justified, capped to seven visible characters, and inset by one character; italic or color formatting on the Speaker field is inherited by that row’s transcript text. Command/Ctrl-click a Speaker field to open the Speaker color menu.'],['Transcript','The main utterance/action text for the row. It supports rich text, symbol insertion, row segment playback, and coding shortcuts. Command/Ctrl-click plays this row or the selected row range once. Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space.']]}]},
       talkaction: {title:'Code pane help', preamble:'The Code pane assigns row-level analytic codes to the active transcript line. It is designed for rapid coding during playback, Follow, or segment-review workflows.', items:[['Code buttons','Click a code to toggle it on or off for the active transcript row. Selected codes are highlighted and stored in the row-level Code field. Uncoded transcript rows show an open-circle (○) Code hotspot at the right edge; Command-Option/Ctrl-Alt-click it to add the first Code. On existing Code icons, plain click shows the Code name, Command/Ctrl-click replaces or deletes the clicked Code, and Command/Ctrl-Option/Alt-click adds another Code from the palette.'],['Follow coordination','When Follow is on, the active row can shift with the currently followed transcript line, so the highlighted Code buttons reflect that line.'],['Transcript playback','Command-click / Ctrl-click a row plays the active row or selected row range once. Command-Option-click / Ctrl-Alt-click repeats the active row or selected row range until Escape or Shift-Space.'],['Section headers','Outside edit mode, click any section header to hide or show only the Code buttons belonging to that section. The triangle shows whether the section is expanded or collapsed, and each section remembers its state in the project.'],['Edit pencil','Toggle code-edit mode. Edit mode temporarily reveals all Code buttons so you can add codes before/after the selected code, add section dividers, delete items, and drag-reorder the palette.'],['Import/export codes','Use Files → Project to import or export reusable Code sets without changing existing row-level codes.']]},
       notes: {title:'Line Note pane help', preamble:'The Line Note pane stores line-level analytic comments for the active transcript row. Command/Ctrl-/ opens the active line note in a popdown below the transcript row. Line Notes can use rich-text formatting for project save and RTF export, but they are not exported in TSV or ELAN.', items:[['Editing comments','Click in the Line Note area and type. The comment belongs to the currently active transcript row.'],['Rich-text formatting','Use the Transcript pane formatting tools for bold, italic, color, and clear formatting while the Line Note field is active.'],['Autosave/project save','Line Note formatting is preserved in autosave and project JSON.'],['RTF export','Transcript RTF export preserves Line Note formatting. TSV and ELAN exports omit Line Notes.'],['Follow caution','If Follow is on during playback, the active row may change. Pause or use segment hold when writing detailed comments for a specific row.']]},
@@ -15168,6 +15173,7 @@ const XFiles = {
     XState.projectExpectedFolderName='';
     XState.projectReconnectHandle=null;
     XState.projectReconnectData=null;
+    XState.preferProjectHomePickerOnNextFolderChoice=false;
     if(typeof XProjectFiles!=='undefined') XProjectFiles.reset();
     this.setReconnectProjectFolderVisible(false);
     XState.activeRowId=null;
@@ -15385,6 +15391,52 @@ const XFiles = {
     return this.projectBaseName()+'-gravar-project.json';
   },
 
+  projectHomePickerId(){
+    return 'gravar-project-home';
+  },
+
+  projectHomeDirectoryPickerOptions(extra){
+    const options=Object.assign({mode:'readwrite',id:this.projectHomePickerId()},extra||{});
+    if(!XState.preferProjectHomePickerOnNextFolderChoice && XState.dataDirHandle && !options.startIn){
+      options.startIn=XState.dataDirHandle;
+    }
+    return options;
+  },
+
+  async openProjectFromHomePicker(){
+    if(typeof window.showOpenFilePicker!=='function'){
+      XState.preferProjectHomePickerOnNextFolderChoice=false;
+      if(XDom.projectFile) XDom.projectFile.click();
+      return false;
+    }
+    try{
+      const [handle]=await window.showOpenFilePicker({
+        id:this.projectHomePickerId(),
+        multiple:false,
+        types:[{description:'Gravar project JSON',accept:{'application/json':['.json']}}]
+      });
+      if(!handle) return false;
+      const file=await handle.getFile();
+      if(!file) return false;
+      // The web platform does not reveal a selected file's parent directory handle.
+      // A shared picker ID is the safe way to let Chrome/Edge remember that directory
+      // and focus the next directory chooser there.
+      XState.preferProjectHomePickerOnNextFolderChoice=true;
+      await this.alignProjectFolderToImportedFile(file);
+      this.loadProject(file);
+      return true;
+    }catch(err){
+      if(err && err.name==='AbortError'){
+        XStatus.set('Project load cancelled.');
+        return false;
+      }
+      console.warn('Project home-aware file picker failed; falling back to the standard project input.',err);
+      XState.preferProjectHomePickerOnNextFolderChoice=false;
+      if(XDom.projectFile) XDom.projectFile.click();
+      return false;
+    }
+  },
+
   setReconnectProjectFolderVisible(visible, folderName){
     if(!XDom.reconnectProjectFolder) return;
     const name=String(folderName||XState.projectExpectedFolderName||'').trim();
@@ -15545,7 +15597,8 @@ const XFiles = {
 
       if(!handle){
         XStatus.set(expected ? 'Choose the saved Project folder: '+expected : 'Choose the Project folder for this project.');
-        handle=await window.showDirectoryPicker({mode:'readwrite'});
+        handle=await window.showDirectoryPicker(this.projectHomeDirectoryPickerOptions());
+        XState.preferProjectHomePickerOnNextFolderChoice=false;
         const permission=await this.verifyDirectoryPermission(handle);
         if(!permission) throw new Error('Project folder permission was not granted.');
       }
@@ -15713,7 +15766,7 @@ const XFiles = {
       }
       if(XDom.saveProject){
         XDom.saveProject.textContent='Save…';
-        XDom.saveProject.title='Open the Project-folder chooser first, verify the target location, then save the project JSON there. Autosave remains automatic and does not open a chooser.';
+        XDom.saveProject.title="Open the Project-folder chooser first, verify the target location, then save the project JSON there. After loading a Project JSON in Chrome/Edge, this chooser is focused on that project’s remembered home folder. Autosave remains automatic and does not open a chooser.";
       }
       return;
     }
@@ -15750,7 +15803,8 @@ const XFiles = {
     }
 
     try{
-      const handle=await window.showDirectoryPicker({mode:'readwrite'});
+      const handle=await window.showDirectoryPicker(this.projectHomeDirectoryPickerOptions());
+      XState.preferProjectHomePickerOnNextFolderChoice=false;
       XState.dataDirHandle=handle;
       XState.dataDirName=handle.name||'selected folder';
       XState.projectExpectedFolderName=XState.dataDirName;
@@ -15789,8 +15843,7 @@ const XFiles = {
     if(!this.hasDirectFolderAccess()) return {supported:false,selected:false};
 
     const previousHandle=XState.dataDirHandle || null;
-    const pickerOptions={mode:'readwrite'};
-    if(previousHandle) pickerOptions.startIn=previousHandle;
+    const pickerOptions=this.projectHomeDirectoryPickerOptions();
 
     XStatus.set('Choose or verify the Project folder for this manual Save. No project data will be written until a folder is selected.');
     try{
@@ -15807,6 +15860,7 @@ const XFiles = {
       }
 
       await this.activateProjectFolderHandle(handle,{sync:false});
+      XState.preferProjectHomePickerOnNextFolderChoice=false;
       if(!sameFolder) XState.projectVideoSavedName='';
       if(typeof XProjectFiles!=='undefined') XProjectFiles.render();
 
@@ -18413,8 +18467,17 @@ const XFiles = {
         e.target.value='';
       };
     }
+    if(XDom.loadProjectButton){
+      XDom.loadProjectButton.addEventListener('click',ev=>{
+        if(typeof window.showOpenFilePicker!=='function') return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.openProjectFromHomePicker();
+      });
+    }
     XDom.projectFile.onchange=async e=>{
       const file=e.target.files[0];
+      XState.preferProjectHomePickerOnNextFolderChoice=false;
       await this.alignProjectFolderToImportedFile(file);
       await this.loadProject(file);
       e.target.value='';
@@ -20461,7 +20524,7 @@ input[data-field="speaker"]{padding-top:calc(var(--transcript-pad-top,5px) + 4px
 </head>
 <body>
 <div class="top" title="Transcript pop-out toolbar. Use these controls for Speaker style, child-tier behavior, chronological sort, and refresh from main Gravar."><strong title="Editable transcript pop-out synchronized with the main transcript">Gravar Transcript</strong><span class="popout-tools"><span class="speaker-style-mini" title="Style the focused Speaker field in this pop-out. Transcript text inherits the Speaker style in both windows."><span>Speaker</span><button id="speakerItalicPopout" title="Toggle italic for the focused Speaker field. Italic Speaker rows become child tiers; toggling italic turns Child tiers on if needed.">I</button><select id="speakerColorPopout" title="Set color for the focused Speaker field"><option value="">color</option><option value="green">green</option><option value="blue">blue</option><option value="red">red</option><option value="purple">purple</option><option value="orange">orange</option><option value="gray">gray</option></select></span><span class="child-tier-mini" title="Parent/child tier controls synced with the main Transcript pane."><label title="When checked, italicized Speaker rows and transcript rows beginning with double parentheses can become child tiers under the just-prior parent tier."><input id="childTierModePopout" type="checkbox"> Child tiers</label><label title="When checked, copy and enforce parent-tier Start/Stop/Dur values on all child tiers under that parent tier, including double-parentheses child tiers. When unchecked, child tiers keep their own timecodes."><input id="forceParentTimecodesPopout" type="checkbox"> Force PT</label></span><button id="sortStartPopout" title="Sort transcript rows chronologically by Start time">sort-Start</button><button id="refreshPopout" title="Refresh this pop-out from the main transcript state">Refresh</button><span title="Edits in this pop-out update the main transcript, and main-window edits sync back here.">Edits sync with main window</span></span></div>
-<div class="wrap" title="Transcript pop-out workspace. Timing fields are on the left; transcript text, group hairlines, code markers, and note markers are on the right."><div class="timing" id="timeRows" title="Timing fields. Command/Ctrl-click Start/End to seek; Command/Ctrl-Option/Alt-click Start/End to insert current time."></div><div class="transcripts" id="transcriptRows" title="Transcript rows. Line Note: Command/Ctrl-\. Project Note: Command-Option/Ctrl-Alt-\ (Command/Ctrl-Shift-\ also accepted). Command/Ctrl-click row text to play the row segment; drag line numbers to reorder; group hairlines and code markers show row annotations."></div></div>
+<div class="wrap" title="Transcript pop-out workspace. Timing fields are on the left; transcript text, group hairlines, code markers, and note markers are on the right."><div class="timing" id="timeRows" title="Timing fields. Command/Ctrl-click Start/End to seek; Command/Ctrl-Option/Alt-click Start/End to insert current time."></div><div class="transcripts" id="transcriptRows" title="Transcript rows. Option-Return splits the focused transcript line at the text cursor into a new row below. Line Note: Command/Ctrl-\. Project Note: Command-Option/Ctrl-Alt-\ (Command/Ctrl-Shift-\ also accepted). Command/Ctrl-click row text to play the row segment; drag line numbers to reorder; group hairlines and code markers show row annotations."></div></div>
 <script>
 try{if(window.opener && window.opener.XWebTips) window.opener.XWebTips.install(document);}catch(err){}
 let rows=[];
@@ -21386,7 +21449,7 @@ function render(){
 
     const line=document.createElement('div');
     line.className='tr-row'+(isComment ? ' comment-row' : '')+(!isComment && isChildTierRow(row) ? ' child-tier-row' : '');
-    line.title='Transcript line. Click to select; Shift-click selects a range; Command/Ctrl-click plays this row or the selected row range once; Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted).';
+    line.title='Transcript line. Option-Return splits at the text cursor into a new row below. Click to select; Shift-click selects a range; Command/Ctrl-click plays this row or the selected row range once; Command/Ctrl-Option/Alt-click repeats this row or the selected row range until Escape or Shift-Space. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted).';
     line.dataset.row=row.id;
     line.onclick=e=>{
       if(e.target.classList.contains('tr')){
@@ -21401,7 +21464,7 @@ function render(){
     ta.className='tr';
     ta.dataset.rowId=row.id;
     ta.dataset.field='transcript';
-    ta.title='Transcript text for this line. Option-Return splits the line at the cursor. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted). Command/Ctrl-click plays this row or selected row range once; Command/Ctrl-Option/Alt-click repeats this row or selected row range until Escape or Shift-Space; Shift-click selects a range.';
+    ta.title='Transcript text for this line. Option-Return splits at the text cursor into a new row below. Line Note: Command/Ctrl-\\. Project Note: Command-Option/Ctrl-Alt-\\ (Command/Ctrl-Shift-\\ also accepted). Command/Ctrl-click plays this row or selected row range once; Command/Ctrl-Option/Alt-click repeats this row or selected row range until Escape or Shift-Space; Shift-click selects a range.';
     ta.value=plainText(row.transcript||'');
     applySpeakerStyleToTranscriptField(row, ta);
     ta.rows=1;
@@ -22539,6 +22602,7 @@ const XDiagnostics = {
     this.section('Save, export, import, and project payloads');
     this.add(this.functionExists(XFiles.saveProject), 'Save project function is available');
     this.add(this.functionExists(XFiles.chooseProjectFolderForManualSave), 'Manual Save verifies the target Project folder first', 'In browsers with direct folder access, Save opens the folder chooser before writing; autosave remains non-interactive.');
+    this.add(this.functionExists(XFiles.openProjectFromHomePicker) && this.functionExists(XFiles.projectHomeDirectoryPickerOptions), 'Project Load establishes a remembered picker home for Save/Designate/Reconnect', 'Chrome/Edge uses one shared File System Access picker ID so the next project-folder chooser can reopen focused on the directory used to load the Project JSON.');
     this.add(this.functionExists(XFiles.loadProject), 'Load project function is available');
     this.add(this.exists(XDom.appendProjectFile), 'Append project control is present');
     this.add(this.functionExists(XFiles.appendProject), 'Append project function is available');
@@ -28811,7 +28875,7 @@ function XEnsureVClipDrawingOverlay135(spec){
    Keeps visible build surfaces synchronized with XBuild at startup.
 ========================= */
 (function(){
-  const EXPECTED_VERSION='0.6.207';
+  const EXPECTED_VERSION='0.6.208';
   const EXPECTED_LABEL='Standalone Web';
   function syncBuildLabels(){
     try{
